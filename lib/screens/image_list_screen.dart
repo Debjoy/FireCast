@@ -62,42 +62,48 @@ class ImageListScreen extends StatelessWidget {
                       int index3 = (index * 3) + 2;
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Row(
-                            children: <Widget>[
-                              index1 < imageEntities.length
-                                  ? Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            index1 < imageEntities.length
+                                ? Expanded(
+                                    child: InkWell(
+                                      onTap: () {},
                                       child: ImageLoader(
                                         assetEntity: imageEntities[index1],
                                         isImageFiles: true,
                                       ),
-                                    )
-                                  : Expanded(child: Container()),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              index2 < imageEntities.length
-                                  ? Expanded(
+                                    ),
+                                  )
+                                : Expanded(child: Container()),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            index2 < imageEntities.length
+                                ? Expanded(
+                                    child: InkWell(
+                                      onTap: () {},
                                       child: ImageLoader(
                                         assetEntity: imageEntities[index2],
                                         isImageFiles: true,
                                       ),
-                                    )
-                                  : Expanded(child: Container()),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              index3 < imageEntities.length
-                                  ? Expanded(
+                                    ),
+                                  )
+                                : Expanded(child: Container()),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            index3 < imageEntities.length
+                                ? Expanded(
+                                    child: InkWell(
+                                      onTap: () {},
                                       child: ImageLoader(
                                         assetEntity: imageEntities[index3],
                                         isImageFiles: true,
                                       ),
-                                    )
-                                  : Expanded(child: Container()),
-                            ],
-                          ),
+                                    ),
+                                  )
+                                : Expanded(child: Container()),
+                          ],
                         ),
                       );
                     },

@@ -42,7 +42,8 @@ class _ImageLoaderState extends State<ImageLoader> {
       height: !isImageFiles ? 60.0 : 80.0,
       width: !isImageFiles ? 80.0 : null,
       decoration: BoxDecoration(
-        color: Colors.indigoAccent[100],
+        color:
+            isImageFiles ? Colors.orangeAccent[100] : Colors.indigoAccent[100],
         borderRadius: BorderRadius.all(
           Radius.circular(10.0),
         ),
@@ -55,7 +56,7 @@ class _ImageLoaderState extends State<ImageLoader> {
           ? Container(
               padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
               child: Icon(
-                Icons.videocam,
+                isImageFiles ? Icons.image : Icons.videocam,
                 color: Colors.white70,
               ),
             )

@@ -59,7 +59,7 @@ class VideoListScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
-                        child: GestureDetector(
+                        child: InkWell(
                           onTap: () {},
                           child: Row(
                             children: <Widget>[
@@ -77,8 +77,13 @@ class VideoListScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(videoEntities[index].title),
-                                      Text(Utils.convertTimeVideos(
-                                          videoEntities[index].duration)),
+                                      Text(
+                                          Utils.convertTimeVideos(
+                                              videoEntities[index].duration),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12.0,
+                                          )),
                                     ],
                                   ),
                                 ),

@@ -91,7 +91,8 @@ class ConnectionInfo extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: GestureDetector(
+                  child: InkWell(
+                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
                     onTap: goToVideos,
                     child: MediaTypeSelector(
                       icon: Icons.video_library,
@@ -104,7 +105,8 @@ class ConnectionInfo extends StatelessWidget {
                   width: 20.0,
                 ),
                 Expanded(
-                  child: GestureDetector(
+                  child: InkWell(
+                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
                     onTap: goToImages,
                     child: MediaTypeSelector(
                       icon: Icons.collections,
@@ -154,9 +156,10 @@ class ConnectionInfo extends StatelessWidget {
                   width: 20.0,
                 ),
                 Expanded(
-                  child: GestureDetector(
+                  child: InkWell(
+                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
                     onTap: findDevices,
-                    child: Container(
+                    child: Ink(
                       padding: EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(40.0)),

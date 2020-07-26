@@ -65,6 +65,7 @@ class _ParentNavigatorState extends State<ParentNavigator> {
             );
           });
         } else {
+          stopFireTvConnection();
           setState(() {
             //TODO:ALSO DISCONNECT EVERYTHING HERE
             flingDevices.remove(player);
@@ -77,11 +78,15 @@ class _ParentNavigatorState extends State<ParentNavigator> {
         }
       });
     } else {
-      fireTvConnected = false;
-      await flingService.disposeController();
-      flingDevices = List();
-      NavigationSystem();
+      stopFireTvConnection();
     }
+  }
+
+  stopFireTvConnection() async {
+    fireTvConnected = false;
+    await flingService.disposeController();
+    flingDevices = List();
+    NavigationSystem();
   }
 
   loadVideoListPage(int index) async {

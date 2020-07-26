@@ -67,7 +67,7 @@ class FolderScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
-                        child: GestureDetector(
+                        child: InkWell(
                           onTap: () {
                             folderMode == FolderMode.VIDEO
                                 ? loadVideoList(index)

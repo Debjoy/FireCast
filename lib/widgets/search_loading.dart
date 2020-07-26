@@ -21,17 +21,20 @@ class SearchLoading extends StatelessWidget {
           SpinKitWave(
             color: Colors.lightBlueAccent,
             size: 50.0,
-            itemCount: 4,
+            itemCount: 8,
             duration: Duration(milliseconds: 900),
           ),
           SizedBox(height: 20.0),
-          Text(
-            "Searching",
-            style: TextStyle(
-                color: Colors.black54,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w900,
-                decoration: TextDecoration.none),
+          Material(
+            color: Colors.white,
+            child: Text(
+              "Searching",
+              style: TextStyle(
+                  color: Colors.black26,
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none),
+            ),
           ),
         ],
       ),
