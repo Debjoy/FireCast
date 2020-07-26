@@ -2,17 +2,20 @@ import 'package:firecast_app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_fling/remote_media_player.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen(
       {@required this.findDevices,
       @required this.isConnected,
       @required this.goToImages,
-      @required this.goToVideos});
+      @required this.goToVideos,
+      @required this.selectedDevice});
   final Function findDevices;
   final bool isConnected;
   final Function goToVideos;
   final Function goToImages;
+  final RemoteMediaPlayer selectedDevice;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +58,7 @@ class HomeScreen extends StatelessWidget {
                 goToImages: goToImages,
                 goToVideos: goToVideos,
                 isConnected: isConnected,
+                selectedDevice: selectedDevice,
               ),
             ],
           ),
@@ -69,11 +73,13 @@ class ConnectionInfo extends StatelessWidget {
       {@required this.findDevices,
       @required this.isConnected,
       @required this.goToImages,
-      @required this.goToVideos});
+      @required this.goToVideos,
+      @required this.selectedDevice});
   final Function findDevices;
   final bool isConnected;
   final Function goToVideos;
   final Function goToImages;
+  final RemoteMediaPlayer selectedDevice;
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +212,7 @@ class ConnectionInfo extends StatelessWidget {
                   style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                 ),
               ),
-              isConnected
+              (selectedDevice != null)
                   ? Container(
                       padding: EdgeInsets.symmetric(
                           vertical: 20.0, horizontal: 25.0),
@@ -221,7 +227,7 @@ class ConnectionInfo extends StatelessWidget {
                           Icon(Icons.tv, size: 40.0, color: Colors.white),
                           SizedBox(width: 10.0),
                           Expanded(
-                            child: Text("Debranjan's 2nd FireTV Stick",
+                            child: Text(selectedDevice.name,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18.0,

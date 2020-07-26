@@ -12,20 +12,8 @@ class FlingService {
   static String _hostedLocation;
   static FlutterFling fling = FlutterFling();
 
-  Future<List<RemoteMediaPlayer>> getCastDevices() async {
-    await FlutterFling.startDiscoveryController((status, player) {
-      _flingDevices = List();
-      if (status == PlayerDiscoveryStatus.Found) {
-        _flingDevices.add(player);
-      } else {
-        _flingDevices.remove(player);
-      }
-    });
-    return _flingDevices;
-  }
-
-  void selectDevice(int index) {
-    _selectedPlayer = _flingDevices[index];
+  void selectDevice(RemoteMediaPlayer player) {
+    _selectedPlayer = player;
   }
 
   Future<RemoteMediaPlayer> _getPlayingDevice() async {
