@@ -4,10 +4,12 @@ import 'package:photo_manager/photo_manager.dart';
 
 class FolderScreen extends StatelessWidget {
   FolderScreen({
+    @required this.loadImageList,
     @required this.loadVideoList,
     @required this.assetFolders,
     @required this.folderMode,
   });
+  final Function loadImageList;
   final Function loadVideoList;
   final List<AssetPathEntity> assetFolders;
   final FolderMode folderMode;
@@ -30,7 +32,7 @@ class FolderScreen extends StatelessWidget {
                   Icon(
                     folderMode == FolderMode.VIDEO
                         ? Icons.video_library
-                        : Icons.image,
+                        : Icons.collections,
                     color: folderMode == FolderMode.VIDEO
                         ? Colors.indigoAccent
                         : Colors.orange,
@@ -69,7 +71,7 @@ class FolderScreen extends StatelessWidget {
                           onTap: () {
                             folderMode == FolderMode.VIDEO
                                 ? loadVideoList(index)
-                                : loadVideoList(index);
+                                : loadImageList(index);
                           },
                           child: Row(
                             children: <Widget>[

@@ -101,7 +101,7 @@ class ConnectionInfo extends StatelessWidget {
                   child: GestureDetector(
                     onTap: goToImages,
                     child: MediaTypeSelector(
-                      icon: Icons.insert_photo,
+                      icon: Icons.collections,
                       title: "Images",
                       color: Colors.orange,
                     ),

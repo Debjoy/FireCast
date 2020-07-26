@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:firecast_app/widgets/image_loader_widget.dart';
 
-class VideoListScreen extends StatelessWidget {
-  VideoListScreen({
-    @required this.videoEntities,
+class ImageListScreen extends StatelessWidget {
+  ImageListScreen({
+    @required this.imageEntities,
   });
-  final List<AssetEntity> videoEntities;
+  final List<AssetEntity> imageEntities;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,15 +26,15 @@ class VideoListScreen extends StatelessWidget {
                     width: 10.0,
                   ),
                   Icon(
-                    Icons.video_library,
-                    color: Colors.indigoAccent,
+                    Icons.collections,
+                    color: Colors.orange,
                     size: 30.0,
                   ),
                   Expanded(
                     child: Container(
                       padding: EdgeInsets.all(10.0),
                       child: Text(
-                        "Videos",
+                        "Images",
                         style: TextStyle(
                             fontSize: 20.0, fontWeight: FontWeight.bold),
                       ),
@@ -53,36 +53,49 @@ class VideoListScreen extends StatelessWidget {
               Expanded(
                 child: Container(
                   child: ListView.builder(
-                    itemCount: videoEntities.length,
+                    itemCount: (imageEntities.length / 3).ceil(),
                     padding:
                         EdgeInsets.only(left: 10.0, right: 10.0, bottom: 30.0),
                     itemBuilder: (context, index) {
+                      int index1 = index * 3;
+                      int index2 = (index * 3) + 1;
+                      int index3 = (index * 3) + 2;
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
+                        padding: const EdgeInsets.only(bottom: 10.0),
                         child: GestureDetector(
                           onTap: () {},
                           child: Row(
                             children: <Widget>[
-                              ImageLoader(
-                                assetEntity: videoEntities[index],
-                                isImageFiles: false,
-                              ),
+                              index1 < imageEntities.length
+                                  ? Expanded(
+                                      child: ImageLoader(
+                                        assetEntity: imageEntities[index1],
+                                        isImageFiles: true,
+                                      ),
+                                    )
+                                  : Expanded(child: Container()),
                               SizedBox(
                                 width: 10.0,
                               ),
-                              Expanded(
-                                child: Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(videoEntities[index].title),
-                                      Text(Utils.convertTimeVideos(
-                                          videoEntities[index].duration)),
-                                    ],
-                                  ),
-                                ),
+                              index2 < imageEntities.length
+                                  ? Expanded(
+                                      child: ImageLoader(
+                                        assetEntity: imageEntities[index2],
+                                        isImageFiles: true,
+                                      ),
+                                    )
+                                  : Expanded(child: Container()),
+                              SizedBox(
+                                width: 10.0,
                               ),
+                              index3 < imageEntities.length
+                                  ? Expanded(
+                                      child: ImageLoader(
+                                        assetEntity: imageEntities[index3],
+                                        isImageFiles: true,
+                                      ),
+                                    )
+                                  : Expanded(child: Container()),
                             ],
                           ),
                         ),

@@ -36,10 +36,11 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
+
+
 
 
 }

@@ -10,6 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:firecast_app/keepalive/app_retain_widget.dart';
 import 'package:firecast_app/keepalive/background_main.dart';
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+
 void main() {
   runApp(MyApp());
 
@@ -18,17 +20,16 @@ void main() {
   channel.invokeMethod('startService', callbackHandle.toRawHandle());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Background Demo',
-      theme: ThemeData.light().copyWith(
-          textTheme: TextTheme()
-              .copyWith(bodyText2: TextStyle(color: kPrimaryTextColor))),
-      home: AppRetainWidget(
-        child: ParentNavigator(),
-      ),
+    return AppRetainWidget(
+      child: ParentNavigator(),
     );
   }
 }

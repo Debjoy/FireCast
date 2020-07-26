@@ -1,0 +1,65 @@
+import 'dart:typed_data';
+import 'package:photo_manager/photo_manager.dart';
+import 'package:flutter/material.dart';
+
+class ImageLoader extends StatefulWidget {
+  final AssetEntity assetEntity;
+  final bool isImageFiles;
+  ImageLoader({@required this.assetEntity, @required this.isImageFiles});
+  @override
+  _ImageLoaderState createState() => _ImageLoaderState();
+}
+
+class _ImageLoaderState extends State<ImageLoader> {
+  @override
+  ImageLoader get widget => super.widget;
+  Uint8List imageData;
+  AssetEntity assetEntity;
+  bool imageFailed = false;
+  bool isImageFiles;
+  @override
+  void initState() {
+    super.initState();
+    assetEntity = widget.assetEntity;
+    isImageFiles = widget.isImageFiles;
+    loadImage();
+  }
+
+  loadImage() async {
+    Uint8List data = await assetEntity.thumbData;
+
+    setState(() {
+      if (data == null) {
+        imageFailed = true;
+      }
+      imageData = data;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: !isImageFiles ? 60.0 : 80.0,
+      width: !isImageFiles ? 80.0 : null,
+      decoration: BoxDecoration(
+        color: Colors.indigoAccent[100],
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+        image: (imageData != null && !imageFailed)
+            ? (new DecorationImage(
+                fit: BoxFit.cover, image: MemoryImage(imageData, scale: 0.5)))
+            : null,
+      ),
+      child: imageData == null
+          ? Container(
+              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+              child: Icon(
+                Icons.videocam,
+                color: Colors.white70,
+              ),
+            )
+          : null,
+    );
+  }
+}
