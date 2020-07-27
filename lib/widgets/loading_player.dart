@@ -1,0 +1,76 @@
+import 'package:firecast_app/utils/constants.dart';
+import 'package:firecast_app/widgets/image_loader_widget.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:photo_manager/photo_manager.dart';
+
+class LoadingPlayerScreen extends StatelessWidget {
+  LoadingPlayerScreen({this.message});
+  final String message;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        BoxShadow(
+          blurRadius: 20.0,
+          color: Colors.grey,
+        ),
+      ]),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 70.0, left: 40.0, right: 40.0),
+        child: Material(
+          color: Colors.white,
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Icon(Icons.cast_connected,
+                      size: 25.0, color: Colors.indigoAccent),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: Text(
+                      "Currently Showing",
+                      style: TextStyle(
+                          fontSize: 19.0, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Icon(Icons.expand_more),
+                ],
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SpinKitWave(
+                      //TODO: Try to mimic fireTV loading animation
+                      color: Colors.lightBlueAccent,
+                      size: 50.0,
+                      itemCount: 8,
+                      duration: Duration(milliseconds: 900),
+                    ),
+                    SizedBox(height: 20.0),
+                    Material(
+                      color: Colors.white,
+                      child: Text(
+                        message,
+                        style: TextStyle(
+                            color: Colors.black26,
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.none),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

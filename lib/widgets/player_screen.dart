@@ -1,0 +1,188 @@
+import 'package:firecast_app/utils/constants.dart';
+import 'package:firecast_app/widgets/image_loader_widget.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:photo_manager/photo_manager.dart';
+
+class PlayerScreen extends StatelessWidget {
+  PlayerScreen({
+    @required this.assetEntity,
+    @required this.isMuted,
+    @required this.isPlaying,
+    @required this.currentPlayerPosition,
+    @required this.onPositionChanged,
+    @required this.onPositionChangeEnd,
+    @required this.onSeekBackward,
+    @required this.onSeekForward,
+    @required this.onMute,
+    @required this.onUnMute,
+    @required this.onPause,
+    @required this.onPlay,
+    this.doHardRefresh: false,
+  });
+  final AssetEntity assetEntity;
+  final bool isMuted;
+  final bool isPlaying;
+  final double currentPlayerPosition;
+  final Function onPositionChanged;
+  final Function onPositionChangeEnd;
+  final Function onSeekForward;
+  final Function onSeekBackward;
+  final Function onPlay;
+  final Function onPause;
+  final Function onMute;
+  final Function onUnMute;
+  final bool doHardRefresh;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        BoxShadow(
+          blurRadius: 20.0,
+          color: Colors.grey,
+        ),
+      ]),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 70.0, left: 40.0, right: 40.0),
+        child: Material(
+          color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Icon(Icons.cast_connected,
+                      size: 25.0, color: Colors.indigoAccent),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: Text(
+                      "Currently Showing",
+                      style: TextStyle(
+                          fontSize: 19.0, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Icon(Icons.expand_more),
+                ],
+              ),
+              SizedBox(height: 20.0),
+              doHardRefresh
+                  ? PlayerImageLoader(
+                      assetEntity: assetEntity,
+                      isImageFiles: false,
+                      key: UniqueKey(),
+                    )
+                  : PlayerImageLoader(
+                      assetEntity: assetEntity,
+                      isImageFiles: false,
+                    ),
+              Expanded(
+                flex: 2,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Icon(Icons.skip_previous,
+                            size: 50.0, color: kPrimaryTextColor)),
+                    Expanded(
+                        child: InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: isMuted ? onUnMute : onMute,
+                      child: Icon(isMuted ? Icons.volume_up : Icons.volume_off,
+                          size: 60.0, color: kPrimaryTextColor),
+                    )),
+                    Expanded(
+                        child: Icon(Icons.skip_next,
+                            size: 50.0, color: kPrimaryTextColor))
+                  ],
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SliderTheme(
+                    data: SliderThemeData(
+                        thumbColor: Colors.indigoAccent,
+                        activeTrackColor: Colors.indigoAccent,
+                        trackHeight: 5.0,
+                        inactiveTickMarkColor: kPrimaryTextColor,
+                        inactiveTrackColor: kPrimaryTextColor),
+                    child: Slider(
+                      value: currentPlayerPosition >= 0
+                          ? currentPlayerPosition
+                          : 0,
+                      onChanged: (value) {
+                        onPositionChanged(value);
+                      },
+                      onChangeEnd: (value) {
+                        onPositionChangeEnd(value);
+                      },
+                      max: assetEntity.duration.toDouble() + 1,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        Utils.convertTimeVideos(currentPlayerPosition.toInt()),
+                        style: TextStyle(
+                            color: kPrimaryTextColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Expanded(
+                        child: Container(),
+                      ),
+                      Text(
+                        Utils.convertTimeVideos(assetEntity.duration),
+                        style: TextStyle(
+                            color: kPrimaryTextColor,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              Expanded(
+                flex: 2,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: onSeekBackward,
+                      child: Icon(Icons.fast_rewind,
+                          size: 50.0, color: kPrimaryTextColor),
+                    )),
+                    Expanded(
+                      child: InkWell(
+                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        onTap: isPlaying ? onPause : onPlay,
+                        child: Icon(
+                          isPlaying
+                              ? Icons.pause_circle_filled
+                              : Icons
+                                  .play_circle_filled, //Icons.pause_circle_filled
+                          color: Colors.indigoAccent,
+                          size: 90.0,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                        child: InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: onSeekForward,
+                      child: Icon(Icons.fast_forward,
+                          size: 50.0, color: kPrimaryTextColor),
+                    ))
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.0)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

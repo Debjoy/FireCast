@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firecast_app/screens/folder_screen.dart';
 import 'package:firecast_app/screens/home_screen.dart';
 import 'package:firecast_app/screens/video_list_screen.dart';
@@ -7,6 +9,8 @@ import 'package:firecast_app/services/media_service.dart';
 import 'package:firecast_app/utils/constants.dart';
 import 'package:firecast_app/widgets/confirm_cast_asset.dart';
 import 'package:firecast_app/widgets/image_loader_widget.dart';
+import 'package:firecast_app/widgets/loading_player.dart';
+import 'package:firecast_app/widgets/player_screen.dart';
 import 'package:firecast_app/widgets/search_loading.dart';
 import 'package:firecast_app/widgets/no_devices_widget.dart';
 import 'package:firecast_app/widgets/device_list.dart';
@@ -41,6 +45,15 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   PanelController confirmCastPanel = PanelController();
   Widget confirmCastPanelWidget = Container();
   AssetEntity tempSelectedAssetEntity;
+
+  PanelController playerScreenPanel = PanelController();
+  Widget playerScreenWidget = Container();
+
+  //PLAYER VALUES
+  double currentPlayerPosition = 0;
+  String playerLoadingMessage = "";
+  bool isPlaying = false;
+  bool isMuted = false;
 
   selectPlayerByIndex(int index) {
     flingService.selectDevice(flingDevices[index]);
@@ -152,10 +165,94 @@ class _ParentNavigatorState extends State<ParentNavigator> {
     print(entity.title);
   }
 
-  castVideo(AssetEntity entity) {
-    if (flingService.getCurrentDevice() != null)
-      print(entity.title);
-    else
+  loadPlayerScreen(AssetEntity entity, [bool hardRefresh = false]) {
+    setState(() {
+      playerScreenWidget = PlayerScreen(
+        assetEntity: entity,
+        currentPlayerPosition: currentPlayerPosition,
+        isMuted: isMuted,
+        isPlaying: isPlaying,
+        onPositionChanged: (value) {
+          currentPlayerPosition = value;
+          loadPlayerScreen(entity);
+        },
+        onPositionChangeEnd: (value) {
+          flingService.seekMediaTo((value * 1000).toInt());
+        },
+        onSeekBackward: () {
+          flingService.seekBackward();
+        },
+        onSeekForward: () {
+          flingService.seekForward();
+        },
+        onMute: () async {
+          await flingService.muteMedia();
+          isMuted = true;
+          loadPlayerScreen(entity);
+        },
+        onUnMute: () async {
+          await flingService.unMuteMedia();
+          isMuted = false;
+          loadPlayerScreen(entity);
+        },
+        onPause: () {
+          flingService.pauseMedia();
+        },
+        onPlay: () {
+          flingService.playMedia();
+        },
+        doHardRefresh: hardRefresh,
+      );
+    });
+  }
+
+  playerLoadingMessages(String message) {
+    setState(() {
+      playerLoadingMessage = message;
+      playerScreenWidget = LoadingPlayerScreen(
+        message: playerLoadingMessage,
+      );
+    });
+  }
+
+  castVideo(AssetEntity entity) async {
+    if (flingService.getCurrentDevice() != null) {
+      //loadPlayerScreen(entity, true);
+      playerLoadingMessages("Loading Media");
+      isPlaying = false;
+      isMuted = false;
+      currentPlayerPosition = 0;
+      setState(() {
+        confirmCastPanel.close();
+        playerScreenPanel.open();
+      });
+      File tempFile = await entity.file;
+      print(tempFile.path);
+      await flingService.startMedia(tempFile.path,
+          (state, condition, position) {
+        if (state == MediaState.PreparingMedia) {
+          playerLoadingMessages("Preparing Media");
+        } else if (state == MediaState.ReadyToPlay) {
+          playerLoadingMessages("Preparing Media");
+        } else if (state == MediaState.Playing) {
+          isPlaying = true;
+          loadPlayerScreen(entity, true);
+        } else if (state == MediaState.Paused) {
+          isPlaying = false;
+          loadPlayerScreen(entity);
+        } else if (state == MediaState.Error || state == MediaState.NoSource) {
+          playerLoadingMessages(state.toString());
+        } else if (state == MediaState.Seeking) {
+          loadPlayerScreen(entity, true);
+        }
+        if (condition == MediaCondition.Good ||
+            condition == MediaCondition.WarningBandwidth ||
+            condition == MediaCondition.WarningContent) {
+          currentPlayerPosition = position / 1000;
+          loadPlayerScreen(entity);
+        }
+      });
+    } else
       findFireTvOrCloseFireTV();
   }
 
@@ -225,9 +322,20 @@ class _ParentNavigatorState extends State<ParentNavigator> {
 
   Future<bool> backPressed() async {
     print(pageStates);
+    if (playerScreenPanel.isPanelOpen) {
+      playerScreenPanel.close();
+      return await Future.value(false);
+    } else if (searchDevicePanel.isPanelOpen) {
+      searchDevicePanel.close();
+      return await Future.value(false);
+    } else if (confirmCastPanel.isPanelOpen) {
+      confirmCastPanel.close();
+      return await Future.value(false);
+    }
     if (pageStates.last == PageState.HOME_SCREEN) {
       pageStates.clear();
       pageStates.add(PageState.HOME_SCREEN);
+      //SystemNavigator.pop()
       return await Future.value(false);
     } else {
       pageStates.removeLast();
@@ -251,29 +359,73 @@ class _ParentNavigatorState extends State<ParentNavigator> {
               .copyWith(bodyText2: TextStyle(color: kPrimaryTextColor))),
       home: WillPopScope(
         onWillPop: backPressed,
-        child: Stack(
-          children: <Widget>[
-            mMAINBODY,
-            SlidingUpPanel(
-              renderPanelSheet: false,
-              minHeight: 0,
-              maxHeight: 300,
-              backdropEnabled: true,
-              controller: confirmCastPanel,
-              panel: confirmCastPanelWidget,
-            ),
-            SlidingUpPanel(
-              renderPanelSheet: false,
-              backdropEnabled: true,
-              controller: searchDevicePanel,
-              isDraggable: false,
-              maxHeight: 300,
-              minHeight: 0,
-              panel: searchPanelCurrentState,
-            ),
-          ],
+        child: MaterialApp(
+          home: ParentStack(
+              mMAINBODY: mMAINBODY,
+              confirmCastPanel: confirmCastPanel,
+              confirmCastPanelWidget: confirmCastPanelWidget,
+              searchDevicePanel: searchDevicePanel,
+              searchPanelCurrentState: searchPanelCurrentState,
+              playerScreenPanel: playerScreenPanel,
+              playerScreenWidget: playerScreenWidget),
         ),
       ),
+    );
+  }
+}
+
+class ParentStack extends StatelessWidget {
+  const ParentStack({
+    Key key,
+    @required this.mMAINBODY,
+    @required this.confirmCastPanel,
+    @required this.confirmCastPanelWidget,
+    @required this.searchDevicePanel,
+    @required this.searchPanelCurrentState,
+    @required this.playerScreenPanel,
+    @required this.playerScreenWidget,
+  }) : super(key: key);
+
+  final Widget mMAINBODY;
+  final PanelController confirmCastPanel;
+  final Widget confirmCastPanelWidget;
+  final PanelController searchDevicePanel;
+  final Widget searchPanelCurrentState;
+  final PanelController playerScreenPanel;
+  final Widget playerScreenWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        mMAINBODY,
+        SlidingUpPanel(
+          renderPanelSheet: false,
+          minHeight: 0,
+          maxHeight: 300,
+          backdropEnabled: true,
+          controller: confirmCastPanel,
+          panel: confirmCastPanelWidget,
+        ),
+        SlidingUpPanel(
+          renderPanelSheet: false,
+          backdropEnabled: true,
+          controller: searchDevicePanel,
+          isDraggable: false,
+          maxHeight: 300,
+          minHeight: 0,
+          panel: searchPanelCurrentState,
+        ),
+        SlidingUpPanel(
+          renderPanelSheet: false,
+          backdropEnabled: true,
+          controller: playerScreenPanel,
+          isDraggable: false,
+          maxHeight: MediaQuery.of(context).size.height,
+          minHeight: 0,
+          panel: playerScreenWidget,
+        ),
+      ],
     );
   }
 }

@@ -47,8 +47,9 @@ class FlingService {
     print(hostedFileURL);
 
     await FlutterFling.play(callback,
-            mediaUri: hostedFileURL,
-            mediaTitle: "Some Title",
+            mediaUri:
+                hostedFileURL, //https://www.radiantmediaplayer.com/media/big-buck-bunny-360p.mp4
+            mediaTitle: fileName,
             player: _selectedPlayer)
         .then((_) => _getPlayingDevice());
   }
@@ -68,6 +69,7 @@ class FlingService {
       await FlutterFling.seekToPlayer(position: milliseconds);
 
   disposeController() async {
+    await FlutterFling.stopPlayer();
     await FlutterFling.stopDiscoveryController();
     _flingDevices = List();
     _selectedPlayer = null;
