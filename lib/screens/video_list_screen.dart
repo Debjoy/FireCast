@@ -6,10 +6,10 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:firecast_app/widgets/image_loader_widget.dart';
 
 class VideoListScreen extends StatelessWidget {
-  VideoListScreen({
-    @required this.videoEntities,
-  });
+  VideoListScreen(
+      {@required this.videoEntities, @required this.onConfirmLoadVideo});
   final List<AssetEntity> videoEntities;
+  final Function onConfirmLoadVideo;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +60,9 @@ class VideoListScreen extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            onConfirmLoadVideo(videoEntities[index]);
+                          },
                           child: Row(
                             children: <Widget>[
                               ImageLoader(
@@ -76,7 +78,8 @@ class VideoListScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text(videoEntities[index].title),
+                                      Text(Utils.shortenTitle(
+                                          videoEntities[index].title)),
                                       Text(
                                           Utils.convertTimeVideos(
                                               videoEntities[index].duration),

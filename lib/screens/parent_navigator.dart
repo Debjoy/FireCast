@@ -5,6 +5,8 @@ import 'package:firecast_app/screens/image_list_screen.dart';
 import 'package:firecast_app/services/fling_service.dart';
 import 'package:firecast_app/services/media_service.dart';
 import 'package:firecast_app/utils/constants.dart';
+import 'package:firecast_app/widgets/confirm_cast_asset.dart';
+import 'package:firecast_app/widgets/image_loader_widget.dart';
 import 'package:firecast_app/widgets/search_loading.dart';
 import 'package:firecast_app/widgets/no_devices_widget.dart';
 import 'package:firecast_app/widgets/device_list.dart';
@@ -35,6 +37,10 @@ class _ParentNavigatorState extends State<ParentNavigator> {
 
   PanelController searchDevicePanel = PanelController();
   Widget searchPanelCurrentState = SearchLoading();
+
+  PanelController confirmCastPanel = PanelController();
+  Widget confirmCastPanelWidget = Container();
+  AssetEntity tempSelectedAssetEntity;
 
   selectPlayerByIndex(int index) {
     flingService.selectDevice(flingDevices[index]);
@@ -102,6 +108,57 @@ class _ParentNavigatorState extends State<ParentNavigator> {
     NavigationSystem();
   }
 
+  castVideoConfirmScreenLoad(AssetEntity entity) {
+    setState(() {
+      confirmCastPanelWidget = ConfirmAsset(
+        assetEntity: entity,
+        image: ImageLoader(
+          assetEntity: entity,
+          isImageFiles: false,
+          key: UniqueKey(),
+        ),
+        isImage: false,
+        castAsset: castVideo,
+        onCancel: () {
+          confirmCastPanel.close();
+        },
+      );
+      confirmCastPanel.open();
+    });
+  }
+
+  castImageConfirmScreenLoad(AssetEntity entity) {
+    setState(() {
+      confirmCastPanelWidget = ConfirmAsset(
+        assetEntity: entity,
+        image: ImageLoader(
+          assetEntity: entity,
+          isImageFiles: false,
+          key: UniqueKey(),
+        ),
+        isImage: true,
+        castAsset: castImage,
+        onCancel: () {
+          confirmCastPanel.close();
+        },
+      );
+      confirmCastPanel.open();
+    });
+    print(entity.title);
+  }
+
+  castImage(AssetEntity entity) {
+    //TODO: check if connected
+    print(entity.title);
+  }
+
+  castVideo(AssetEntity entity) {
+    if (flingService.getCurrentDevice() != null)
+      print(entity.title);
+    else
+      findFireTvOrCloseFireTV();
+  }
+
   // ignore: non_constant_identifier_names
   void NavigationSystem() {
     if (pageStates.length == 0 || currentPageState != pageStates.last) {
@@ -153,18 +210,20 @@ class _ParentNavigatorState extends State<ParentNavigator> {
       setState(() {
         mMAINBODY = VideoListScreen(
           videoEntities: videoEntities,
+          onConfirmLoadVideo: castVideoConfirmScreenLoad,
         );
       });
     } else if (currentPageState == PageState.IMAGE_LIST_SCREEN) {
       setState(() {
         mMAINBODY = ImageListScreen(
           imageEntities: imageEntities,
+          onConfirmLoadImage: castImageConfirmScreenLoad,
         );
       });
     }
   }
 
-  Future<bool> backpressed() async {
+  Future<bool> backPressed() async {
     print(pageStates);
     if (pageStates.last == PageState.HOME_SCREEN) {
       pageStates.clear();
@@ -191,15 +250,17 @@ class _ParentNavigatorState extends State<ParentNavigator> {
           textTheme: TextTheme()
               .copyWith(bodyText2: TextStyle(color: kPrimaryTextColor))),
       home: WillPopScope(
-        onWillPop: backpressed,
+        onWillPop: backPressed,
         child: Stack(
           children: <Widget>[
             mMAINBODY,
             SlidingUpPanel(
+              renderPanelSheet: false,
               minHeight: 0,
-              panel: Center(
-                child: Text("This is the sliding Widget 1"),
-              ),
+              maxHeight: 300,
+              backdropEnabled: true,
+              controller: confirmCastPanel,
+              panel: confirmCastPanelWidget,
             ),
             SlidingUpPanel(
               renderPanelSheet: false,

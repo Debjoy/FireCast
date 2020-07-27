@@ -1,15 +1,13 @@
-import 'dart:typed_data';
-
 import 'package:firecast_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:firecast_app/widgets/image_loader_widget.dart';
 
 class ImageListScreen extends StatelessWidget {
-  ImageListScreen({
-    @required this.imageEntities,
-  });
+  ImageListScreen(
+      {@required this.imageEntities, @required this.onConfirmLoadImage});
   final List<AssetEntity> imageEntities;
+  final Function onConfirmLoadImage;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +65,10 @@ class ImageListScreen extends StatelessWidget {
                             index1 < imageEntities.length
                                 ? Expanded(
                                     child: InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        onConfirmLoadImage(
+                                            imageEntities[index1]);
+                                      },
                                       child: ImageLoader(
                                         assetEntity: imageEntities[index1],
                                         isImageFiles: true,
@@ -81,7 +82,10 @@ class ImageListScreen extends StatelessWidget {
                             index2 < imageEntities.length
                                 ? Expanded(
                                     child: InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        onConfirmLoadImage(
+                                            imageEntities[index2]);
+                                      },
                                       child: ImageLoader(
                                         assetEntity: imageEntities[index2],
                                         isImageFiles: true,
@@ -95,7 +99,10 @@ class ImageListScreen extends StatelessWidget {
                             index3 < imageEntities.length
                                 ? Expanded(
                                     child: InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        onConfirmLoadImage(
+                                            imageEntities[index3]);
+                                      },
                                       child: ImageLoader(
                                         assetEntity: imageEntities[index3],
                                         isImageFiles: true,

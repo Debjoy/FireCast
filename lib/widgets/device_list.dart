@@ -24,7 +24,7 @@ class DeviceList extends StatelessWidget {
             ),
           ]),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 35.0, horizontal: 40.0),
+        padding: EdgeInsets.symmetric(vertical: 35.0, horizontal: 40.0),
         child: Material(
           color: Colors.white,
           child: Column(

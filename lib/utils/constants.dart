@@ -33,4 +33,14 @@ class Utils {
     } else
       return "$number";
   }
+
+  static String shortenTitle(String title) {
+    String result = title;
+    if (title.length > 49) {
+      result = title.substring(0, 40) +
+          "~" +
+          title.substring(title.lastIndexOf("."));
+    }
+    return result;
+  }
 }

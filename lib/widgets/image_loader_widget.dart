@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 class ImageLoader extends StatefulWidget {
   final AssetEntity assetEntity;
   final bool isImageFiles;
-  ImageLoader({@required this.assetEntity, @required this.isImageFiles});
+  ImageLoader(
+      {@required this.assetEntity, @required this.isImageFiles, Key key})
+      : super(key: key);
   @override
   _ImageLoaderState createState() => _ImageLoaderState();
 }
