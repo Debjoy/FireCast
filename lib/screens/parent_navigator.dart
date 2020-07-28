@@ -277,19 +277,19 @@ class _ParentNavigatorState extends State<ParentNavigator> {
           (state, condition, position) {
         if (state == MediaState.PreparingMedia) {
           playerLoadingMessages("Preparing Media");
-        } else if (state == MediaState.ReadyToPlay) {
-          playerLoadingMessages("Ready to Play");
         } else if (state == MediaState.Error || state == MediaState.NoSource) {
           playerLoadingMessages(state.toString());
         } else {
-          currentPlayerPosition = position / 100;
+          currentPlayerPosition = position / 1000;
           if (state == MediaState.Playing) {
             isPlaying = true;
-            loadPlayerScreen(entity, true);
+            loadPlayerScreen(entity);
           } else if (state == MediaState.Paused) {
             isPlaying = false;
-            loadPlayerScreen(entity, true);
+            loadPlayerScreen(entity);
           } else if (state == MediaState.Seeking) {
+            loadPlayerScreen(entity);
+          } else if (state == MediaState.ReadyToPlay) {
             loadPlayerScreen(entity, true);
           } else {
             loadPlayerScreen(entity);
