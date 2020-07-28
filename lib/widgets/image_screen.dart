@@ -3,12 +3,15 @@ import 'package:firecast_app/widgets/image_loader_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-class LoadingPlayerScreen extends StatelessWidget {
-  LoadingPlayerScreen({this.message, Key key}) : super(key: key);
-  final String message;
+class ImageScreen extends StatelessWidget {
+  ImageScreen({
+    @required this.assetEntity,
+    this.doHardRefresh: false,
+  });
+  final AssetEntity assetEntity;
+  final bool doHardRefresh;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,11 +26,12 @@ class LoadingPlayerScreen extends StatelessWidget {
         child: Material(
           color: Colors.white,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Row(
                 children: <Widget>[
                   Icon(Icons.cast_connected,
-                      size: 25.0, color: Colors.indigoAccent),
+                      size: 25.0, color: Colors.orangeAccent),
                   SizedBox(
                     width: 10.0,
                   ),
@@ -41,32 +45,31 @@ class LoadingPlayerScreen extends StatelessWidget {
                   Icon(Icons.expand_more),
                 ],
               ),
+              SizedBox(height: 20.0),
+              doHardRefresh
+                  ? PlayerImageLoader(
+                      assetEntity: assetEntity,
+                      isImageFiles: true,
+                      key: UniqueKey(),
+                    )
+                  : PlayerImageLoader(
+                      assetEntity: assetEntity,
+                      isImageFiles: true,
+                    ),
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                flex: 2,
+                child: Row(
                   children: <Widget>[
-                    SpinKitWave(
-                      //TODO: Try to mimic fireTV loading animation
-                      color: Colors.lightBlueAccent,
-                      size: 50.0,
-                      itemCount: 8,
-                      duration: Duration(milliseconds: 900),
-                    ),
-                    SizedBox(height: 20.0),
-                    Material(
-                      color: Colors.white,
-                      child: Text(
-                        message,
-                        style: TextStyle(
-                            color: Colors.black26,
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.none),
-                      ),
-                    ),
+                    Expanded(
+                        child: Icon(Icons.skip_previous,
+                            size: 70.0, color: kPrimaryTextColor)),
+                    Expanded(child: Container()),
+                    Expanded(
+                        child: Icon(Icons.skip_next,
+                            size: 70.0, color: kPrimaryTextColor))
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

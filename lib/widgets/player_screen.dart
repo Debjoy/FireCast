@@ -110,9 +110,12 @@ class PlayerScreen extends StatelessWidget {
                         inactiveTickMarkColor: kPrimaryTextColor,
                         inactiveTrackColor: kPrimaryTextColor),
                     child: Slider(
-                      value: currentPlayerPosition >= 0
-                          ? currentPlayerPosition
-                          : 0,
+                      value: (currentPlayerPosition >=
+                              (assetEntity.duration.toDouble() + 1))
+                          ? (assetEntity.duration.toDouble())
+                          : (currentPlayerPosition >= 0
+                              ? currentPlayerPosition
+                              : 0),
                       onChanged: (value) {
                         onPositionChanged(value);
                       },

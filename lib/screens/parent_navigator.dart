@@ -9,6 +9,7 @@ import 'package:firecast_app/services/media_service.dart';
 import 'package:firecast_app/utils/constants.dart';
 import 'package:firecast_app/widgets/confirm_cast_asset.dart';
 import 'package:firecast_app/widgets/image_loader_widget.dart';
+import 'package:firecast_app/widgets/image_screen.dart';
 import 'package:firecast_app/widgets/loading_player.dart';
 import 'package:firecast_app/widgets/player_screen.dart';
 import 'package:firecast_app/widgets/search_loading.dart';
@@ -160,9 +161,41 @@ class _ParentNavigatorState extends State<ParentNavigator> {
     print(entity.title);
   }
 
-  castImage(AssetEntity entity) {
+  castImage(AssetEntity entity) async {
     //TODO: check if connected
-    print(entity.title);
+    if (flingService.getCurrentDevice() != null) {
+      playerLoadingMessages("Loading Media");
+      setState(() {
+        confirmCastPanel.close();
+        playerScreenPanel.open();
+      });
+      File tempFile = await entity.file;
+
+      await flingService.startMedia(tempFile.path,
+          (state, condition, position) {
+        if (state == MediaState.PreparingMedia) {
+          playerLoadingMessages("Preparing Media");
+        } else if (state == MediaState.ReadyToPlay) {
+          playerLoadingMessages("Ready to Play");
+        }
+        if (condition == MediaCondition.Good ||
+            condition == MediaCondition.WarningBandwidth ||
+            condition == MediaCondition.WarningContent) {
+          loadImagePlayerScreen(entity);
+        }
+      });
+    } else {
+      findFireTvOrCloseFireTV();
+    }
+  }
+
+  loadImagePlayerScreen(AssetEntity entity) {
+    setState(() {
+      playerScreenWidget = ImageScreen(
+        assetEntity: entity,
+        doHardRefresh: true,
+      );
+    });
   }
 
   loadPlayerScreen(AssetEntity entity, [bool hardRefresh = false]) {
@@ -211,6 +244,7 @@ class _ParentNavigatorState extends State<ParentNavigator> {
       playerLoadingMessage = message;
       playerScreenWidget = LoadingPlayerScreen(
         message: playerLoadingMessage,
+        key: UniqueKey(),
       );
     });
   }
@@ -233,13 +267,13 @@ class _ParentNavigatorState extends State<ParentNavigator> {
         if (state == MediaState.PreparingMedia) {
           playerLoadingMessages("Preparing Media");
         } else if (state == MediaState.ReadyToPlay) {
-          playerLoadingMessages("Preparing Media");
+          playerLoadingMessages("Ready to Play");
         } else if (state == MediaState.Playing) {
           isPlaying = true;
           loadPlayerScreen(entity, true);
         } else if (state == MediaState.Paused) {
           isPlaying = false;
-          loadPlayerScreen(entity);
+          loadPlayerScreen(entity, true);
         } else if (state == MediaState.Error || state == MediaState.NoSource) {
           playerLoadingMessages(state.toString());
         } else if (state == MediaState.Seeking) {

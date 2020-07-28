@@ -71,7 +71,7 @@ class FlingService {
   disposeController() async {
     await FlutterFling.stopPlayer();
     await FlutterFling.stopDiscoveryController();
-    _flingDevices = List();
+    _flingDevices = null;
     _selectedPlayer = null;
   }
 }
