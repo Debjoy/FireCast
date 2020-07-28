@@ -3,16 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class FolderScreen extends StatelessWidget {
-  FolderScreen({
-    @required this.loadImageList,
-    @required this.loadVideoList,
-    @required this.assetFolders,
-    @required this.folderMode,
-  });
+  FolderScreen(
+      {@required this.loadImageList,
+      @required this.loadVideoList,
+      @required this.assetFolders,
+      @required this.folderMode,
+      @required this.playerStarted,
+      @required this.onFabButtonPressed});
   final Function loadImageList;
   final Function loadVideoList;
   final List<AssetPathEntity> assetFolders;
   final FolderMode folderMode;
+  final bool playerStarted;
+  final Function onFabButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +127,13 @@ class FolderScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: playerStarted
+          ? FloatingActionButton(
+              onPressed: onFabButtonPressed,
+              backgroundColor: Colors.blueGrey.shade900,
+              child: Icon(Icons.cast_connected),
+            )
+          : null,
     );
   }
 }

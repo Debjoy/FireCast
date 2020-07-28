@@ -40,6 +40,8 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   FlingService flingService = FlingService();
   List<RemoteMediaPlayer> flingDevices;
 
+  bool playerStarted = false;
+
   PanelController searchDevicePanel = PanelController();
   Widget searchPanelCurrentState = SearchLoading();
 
@@ -103,6 +105,7 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   }
 
   stopFireTvConnection() async {
+    playerStarted = false;
     fireTvConnected = false;
     await flingService.disposeController();
     flingDevices = List();
@@ -165,6 +168,8 @@ class _ParentNavigatorState extends State<ParentNavigator> {
     //TODO: check if connected
     if (flingService.getCurrentDevice() != null) {
       playerLoadingMessages("Loading Media");
+      playerStarted = true;
+      NavigationSystem();
       setState(() {
         confirmCastPanel.close();
         playerScreenPanel.open();
@@ -177,11 +182,15 @@ class _ParentNavigatorState extends State<ParentNavigator> {
           playerLoadingMessages("Preparing Media");
         } else if (state == MediaState.ReadyToPlay) {
           playerLoadingMessages("Ready to Play");
+        } else if (state == MediaState.Error || state == MediaState.NoSource) {
+          playerLoadingMessages(state.toString());
+        } else {
+          loadImagePlayerScreen(entity);
         }
         if (condition == MediaCondition.Good ||
             condition == MediaCondition.WarningBandwidth ||
             condition == MediaCondition.WarningContent) {
-          loadImagePlayerScreen(entity);
+          //loadImagePlayerScreen(entity);
         }
       });
     } else {
@@ -252,6 +261,8 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   castVideo(AssetEntity entity) async {
     if (flingService.getCurrentDevice() != null) {
       //loadPlayerScreen(entity, true);
+      playerStarted = true;
+      NavigationSystem();
       playerLoadingMessages("Loading Media");
       isPlaying = false;
       isMuted = false;
@@ -268,23 +279,25 @@ class _ParentNavigatorState extends State<ParentNavigator> {
           playerLoadingMessages("Preparing Media");
         } else if (state == MediaState.ReadyToPlay) {
           playerLoadingMessages("Ready to Play");
-        } else if (state == MediaState.Playing) {
-          isPlaying = true;
-          loadPlayerScreen(entity, true);
-        } else if (state == MediaState.Paused) {
-          isPlaying = false;
-          loadPlayerScreen(entity, true);
         } else if (state == MediaState.Error || state == MediaState.NoSource) {
           playerLoadingMessages(state.toString());
-        } else if (state == MediaState.Seeking) {
-          loadPlayerScreen(entity, true);
+        } else {
+          currentPlayerPosition = position / 100;
+          if (state == MediaState.Playing) {
+            isPlaying = true;
+            loadPlayerScreen(entity, true);
+          } else if (state == MediaState.Paused) {
+            isPlaying = false;
+            loadPlayerScreen(entity, true);
+          } else if (state == MediaState.Seeking) {
+            loadPlayerScreen(entity, true);
+          } else {
+            loadPlayerScreen(entity);
+          }
         }
         if (condition == MediaCondition.Good ||
             condition == MediaCondition.WarningBandwidth ||
-            condition == MediaCondition.WarningContent) {
-          currentPlayerPosition = position / 1000;
-          loadPlayerScreen(entity);
-        }
+            condition == MediaCondition.WarningContent) {}
       });
     } else
       findFireTvOrCloseFireTV();
@@ -317,39 +330,55 @@ class _ParentNavigatorState extends State<ParentNavigator> {
             //NavigationSystem();
             findFireTvOrCloseFireTV();
           },
+          playerStarted: playerStarted,
+          onFabButtonPressed: () {
+            playerScreenPanel.open();
+          },
         );
       });
     } else if (currentPageState == PageState.FOLDER_VIDEO_SCREEN) {
       setState(() {
         mMAINBODY = FolderScreen(
-          loadVideoList: loadVideoListPage,
-          loadImageList: loadImageListPage,
-          assetFolders: videoFolders,
-          folderMode: FolderMode.VIDEO,
-        );
+            loadVideoList: loadVideoListPage,
+            loadImageList: loadImageListPage,
+            assetFolders: videoFolders,
+            folderMode: FolderMode.VIDEO,
+            playerStarted: playerStarted,
+            onFabButtonPressed: () {
+              playerScreenPanel.open();
+            });
       });
     } else if (currentPageState == PageState.FOLDER_IMAGE_SCREEN) {
       setState(() {
         mMAINBODY = FolderScreen(
-          loadVideoList: loadVideoListPage,
-          loadImageList: loadImageListPage,
-          assetFolders: imageFolders,
-          folderMode: FolderMode.IMAGE,
-        );
+            loadVideoList: loadVideoListPage,
+            loadImageList: loadImageListPage,
+            assetFolders: imageFolders,
+            folderMode: FolderMode.IMAGE,
+            playerStarted: playerStarted,
+            onFabButtonPressed: () {
+              playerScreenPanel.open();
+            });
       });
     } else if (currentPageState == PageState.VIDEO_LIST_SCREEN) {
       setState(() {
         mMAINBODY = VideoListScreen(
-          videoEntities: videoEntities,
-          onConfirmLoadVideo: castVideoConfirmScreenLoad,
-        );
+            videoEntities: videoEntities,
+            onConfirmLoadVideo: castVideoConfirmScreenLoad,
+            playerStarted: playerStarted,
+            onFabButtonPressed: () {
+              playerScreenPanel.open();
+            });
       });
     } else if (currentPageState == PageState.IMAGE_LIST_SCREEN) {
       setState(() {
         mMAINBODY = ImageListScreen(
-          imageEntities: imageEntities,
-          onConfirmLoadImage: castImageConfirmScreenLoad,
-        );
+            imageEntities: imageEntities,
+            onConfirmLoadImage: castImageConfirmScreenLoad,
+            playerStarted: playerStarted,
+            onFabButtonPressed: () {
+              playerScreenPanel.open();
+            });
       });
     }
   }

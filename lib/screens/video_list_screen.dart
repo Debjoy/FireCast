@@ -7,9 +7,14 @@ import 'package:firecast_app/widgets/image_loader_widget.dart';
 
 class VideoListScreen extends StatelessWidget {
   VideoListScreen(
-      {@required this.videoEntities, @required this.onConfirmLoadVideo});
+      {@required this.videoEntities,
+      @required this.onConfirmLoadVideo,
+      @required this.playerStarted,
+      @required this.onFabButtonPressed});
   final List<AssetEntity> videoEntities;
   final Function onConfirmLoadVideo;
+  final bool playerStarted;
+  final Function onFabButtonPressed;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,6 +108,13 @@ class VideoListScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: playerStarted
+          ? FloatingActionButton(
+              onPressed: onFabButtonPressed,
+              backgroundColor: Colors.blueGrey.shade900,
+              child: Icon(Icons.cast_connected),
+            )
+          : null,
     );
   }
 }

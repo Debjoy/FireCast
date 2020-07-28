@@ -10,12 +10,16 @@ class HomeScreen extends StatelessWidget {
       @required this.isConnected,
       @required this.goToImages,
       @required this.goToVideos,
-      @required this.selectedDevice});
+      @required this.selectedDevice,
+      @required this.playerStarted,
+      @required this.onFabButtonPressed});
   final Function findDevices;
   final bool isConnected;
   final Function goToVideos;
   final Function goToImages;
   final RemoteMediaPlayer selectedDevice;
+  final bool playerStarted;
+  final Function onFabButtonPressed;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +68,13 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: playerStarted
+          ? FloatingActionButton(
+              backgroundColor: Colors.blueGrey.shade900,
+              onPressed: onFabButtonPressed,
+              child: Icon(Icons.cast_connected),
+            )
+          : null,
     );
   }
 }
