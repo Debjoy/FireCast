@@ -202,6 +202,11 @@ class _ParentNavigatorState extends State<ParentNavigator> {
     setState(() {
       playerScreenWidget = ImageScreen(
         assetEntity: entity,
+        onCollapse: () {
+          playerScreenPanel.close();
+        },
+        onPlayNextMedia: () {}, //TODO: Play Next Media
+        onPlayPreviousMedia: () {}, //TODO: Play Previous Media
         doHardRefresh: true,
       );
     });
@@ -243,6 +248,11 @@ class _ParentNavigatorState extends State<ParentNavigator> {
         onPlay: () {
           flingService.playMedia();
         },
+        onCollapsed: () {
+          playerScreenPanel.close();
+        },
+        onPlayPreviousMedia: () {}, //TODO: Play previous Media
+        onPlayNextMedia: () {}, //TODO: play next media
         doHardRefresh: hardRefresh,
       );
     });
@@ -253,6 +263,9 @@ class _ParentNavigatorState extends State<ParentNavigator> {
       playerLoadingMessage = message;
       playerScreenWidget = LoadingPlayerScreen(
         message: playerLoadingMessage,
+        onCollapsePlayer: () {
+          playerScreenPanel.close();
+        },
         key: UniqueKey(),
       );
     });

@@ -7,8 +7,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class LoadingPlayerScreen extends StatelessWidget {
-  LoadingPlayerScreen({this.message, Key key}) : super(key: key);
+  LoadingPlayerScreen({this.message, @required this.onCollapsePlayer, Key key})
+      : super(key: key);
   final String message;
+  final Function onCollapsePlayer;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +40,10 @@ class LoadingPlayerScreen extends StatelessWidget {
                           fontSize: 19.0, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Icon(Icons.expand_more),
+                  InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: onCollapsePlayer,
+                      child: Icon(Icons.expand_more)),
                 ],
               ),
               Expanded(

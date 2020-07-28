@@ -20,6 +20,9 @@ class PlayerScreen extends StatelessWidget {
     @required this.onUnMute,
     @required this.onPause,
     @required this.onPlay,
+    @required this.onCollapsed,
+    @required this.onPlayNextMedia,
+    @required this.onPlayPreviousMedia,
     this.doHardRefresh: false,
   });
   final AssetEntity assetEntity;
@@ -35,6 +38,9 @@ class PlayerScreen extends StatelessWidget {
   final Function onMute;
   final Function onUnMute;
   final bool doHardRefresh;
+  final Function onCollapsed;
+  final Function onPlayNextMedia;
+  final Function onPlayPreviousMedia;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,7 +71,10 @@ class PlayerScreen extends StatelessWidget {
                           fontSize: 19.0, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Icon(Icons.expand_more),
+                  InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: onCollapsed,
+                      child: Icon(Icons.expand_more)),
                 ],
               ),
               SizedBox(height: 20.0),
@@ -84,8 +93,12 @@ class PlayerScreen extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                        child: Icon(Icons.skip_previous,
-                            size: 50.0, color: kPrimaryTextColor)),
+                        child: InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: onPlayPreviousMedia,
+                      child: Icon(Icons.skip_previous,
+                          size: 50.0, color: kPrimaryTextColor),
+                    )),
                     Expanded(
                         child: InkWell(
                       borderRadius: BorderRadius.all(Radius.circular(40.0)),
@@ -94,8 +107,12 @@ class PlayerScreen extends StatelessWidget {
                           size: 60.0, color: kPrimaryTextColor),
                     )),
                     Expanded(
-                        child: Icon(Icons.skip_next,
-                            size: 50.0, color: kPrimaryTextColor))
+                        child: InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: onPlayNextMedia,
+                      child: Icon(Icons.skip_next,
+                          size: 50.0, color: kPrimaryTextColor),
+                    ))
                   ],
                 ),
               ),

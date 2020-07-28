@@ -8,10 +8,16 @@ import 'package:photo_manager/photo_manager.dart';
 class ImageScreen extends StatelessWidget {
   ImageScreen({
     @required this.assetEntity,
+    @required this.onCollapse,
+    @required this.onPlayNextMedia,
+    @required this.onPlayPreviousMedia,
     this.doHardRefresh: false,
   });
   final AssetEntity assetEntity;
   final bool doHardRefresh;
+  final Function onCollapse;
+  final Function onPlayNextMedia;
+  final Function onPlayPreviousMedia;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +48,10 @@ class ImageScreen extends StatelessWidget {
                           fontSize: 19.0, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Icon(Icons.expand_more),
+                  InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: onCollapse,
+                      child: Icon(Icons.expand_more)),
                 ],
               ),
               SizedBox(height: 20.0),
@@ -61,12 +70,20 @@ class ImageScreen extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                        child: Icon(Icons.skip_previous,
-                            size: 70.0, color: kPrimaryTextColor)),
+                        child: InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: onPlayPreviousMedia,
+                      child: Icon(Icons.skip_previous,
+                          size: 70.0, color: kPrimaryTextColor),
+                    )),
                     Expanded(child: Container()),
                     Expanded(
-                        child: Icon(Icons.skip_next,
-                            size: 70.0, color: kPrimaryTextColor))
+                        child: InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: onPlayNextMedia,
+                      child: Icon(Icons.skip_next,
+                          size: 70.0, color: kPrimaryTextColor),
+                    ))
                   ],
                 ),
               ),
