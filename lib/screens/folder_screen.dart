@@ -66,67 +66,69 @@ class FolderScreen extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  child: ListView.builder(
-                    itemCount: assetFolders.length,
-                    padding:
-                        EdgeInsets.only(left: 10.0, right: 10.0, bottom: 30.0),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: InkWell(
-                          onTap: () {
-                            folderMode == FolderMode.VIDEO
-                                ? loadVideoList(index)
-                                : loadImageList(index);
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.folder,
-                                size: 55.0,
-                                color: folderMode == FolderMode.VIDEO
-                                    ? Colors.indigoAccent
-                                    : Colors.orange,
-                              ),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        child: Text(
-                                          assetFolders[index].name == ""
-                                              ? "root"
-                                              : assetFolders[index].name,
+                  child: Scrollbar(
+                    child: ListView.builder(
+                      itemCount: assetFolders.length,
+                      padding: EdgeInsets.only(
+                          left: 10.0, right: 10.0, bottom: 30.0),
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 20.0),
+                          child: InkWell(
+                            onTap: () {
+                              folderMode == FolderMode.VIDEO
+                                  ? loadVideoList(index)
+                                  : loadImageList(index);
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.folder,
+                                  size: 55.0,
+                                  color: folderMode == FolderMode.VIDEO
+                                      ? Colors.indigoAccent
+                                      : Colors.orange,
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          child: Text(
+                                            assetFolders[index].name == ""
+                                                ? "root"
+                                                : assetFolders[index].name,
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                color: kPrimaryTextColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: "Roboto"),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${assetFolders[index].assetCount} " +
+                                              (folderMode == FolderMode.VIDEO
+                                                  ? "videos"
+                                                  : "images"),
                                           style: TextStyle(
-                                              fontSize: 20.0,
-                                              color: kPrimaryTextColor,
-                                              fontWeight: FontWeight.bold,
+                                              color: kSubTextColor,
                                               fontFamily: "Roboto"),
                                         ),
-                                      ),
-                                      Text(
-                                        "${assetFolders[index].assetCount} " +
-                                            (folderMode == FolderMode.VIDEO
-                                                ? "videos"
-                                                : "images"),
-                                        style: TextStyle(
-                                            color: kSubTextColor,
-                                            fontFamily: "Roboto"),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

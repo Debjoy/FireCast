@@ -58,70 +58,72 @@ class ImageListScreen extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  child: ListView.builder(
-                    itemCount: (imageEntities.length / 3).ceil(),
-                    padding:
-                        EdgeInsets.only(left: 10.0, right: 10.0, bottom: 30.0),
-                    itemBuilder: (context, index) {
-                      int index1 = index * 3;
-                      int index2 = (index * 3) + 1;
-                      int index3 = (index * 3) + 2;
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Row(
-                          children: <Widget>[
-                            index1 < imageEntities.length
-                                ? Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        onConfirmLoadImage(
-                                            imageEntities[index1]);
-                                      },
-                                      child: ImageLoader(
-                                        assetEntity: imageEntities[index1],
-                                        isImageFiles: true,
+                  child: Scrollbar(
+                    child: ListView.builder(
+                      itemCount: (imageEntities.length / 3).ceil(),
+                      padding: EdgeInsets.only(
+                          left: 10.0, right: 10.0, bottom: 30.0),
+                      itemBuilder: (context, index) {
+                        int index1 = index * 3;
+                        int index2 = (index * 3) + 1;
+                        int index3 = (index * 3) + 2;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Row(
+                            children: <Widget>[
+                              index1 < imageEntities.length
+                                  ? Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          onConfirmLoadImage(
+                                              imageEntities[index1]);
+                                        },
+                                        child: ImageLoader(
+                                          assetEntity: imageEntities[index1],
+                                          isImageFiles: true,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : Expanded(child: Container()),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            index2 < imageEntities.length
-                                ? Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        onConfirmLoadImage(
-                                            imageEntities[index2]);
-                                      },
-                                      child: ImageLoader(
-                                        assetEntity: imageEntities[index2],
-                                        isImageFiles: true,
+                                    )
+                                  : Expanded(child: Container()),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              index2 < imageEntities.length
+                                  ? Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          onConfirmLoadImage(
+                                              imageEntities[index2]);
+                                        },
+                                        child: ImageLoader(
+                                          assetEntity: imageEntities[index2],
+                                          isImageFiles: true,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : Expanded(child: Container()),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            index3 < imageEntities.length
-                                ? Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        onConfirmLoadImage(
-                                            imageEntities[index3]);
-                                      },
-                                      child: ImageLoader(
-                                        assetEntity: imageEntities[index3],
-                                        isImageFiles: true,
+                                    )
+                                  : Expanded(child: Container()),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              index3 < imageEntities.length
+                                  ? Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          onConfirmLoadImage(
+                                              imageEntities[index3]);
+                                        },
+                                        child: ImageLoader(
+                                          assetEntity: imageEntities[index3],
+                                          isImageFiles: true,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : Expanded(child: Container()),
-                          ],
-                        ),
-                      );
-                    },
+                                    )
+                                  : Expanded(child: Container()),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               )

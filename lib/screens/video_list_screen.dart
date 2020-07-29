@@ -60,57 +60,59 @@ class VideoListScreen extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  child: ListView.builder(
-                    itemCount: videoEntities.length,
-                    padding:
-                        EdgeInsets.only(left: 10.0, right: 10.0, bottom: 30.0),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: InkWell(
-                          onTap: () {
-                            onConfirmLoadVideo(videoEntities[index]);
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              ImageLoader(
-                                assetEntity: videoEntities[index],
-                                isImageFiles: false,
-                              ),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        Utils.shortenTitle(
-                                            videoEntities[index].title),
-                                        style: TextStyle(
-                                          color: kPrimaryTextColor,
-                                        ),
-                                      ),
-                                      Text(
-                                          Utils.convertTimeVideos(
-                                              videoEntities[index].duration),
+                  child: Scrollbar(
+                    child: ListView.builder(
+                      itemCount: videoEntities.length,
+                      padding: EdgeInsets.only(
+                          left: 10.0, right: 10.0, bottom: 30.0),
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 20.0),
+                          child: InkWell(
+                            onTap: () {
+                              onConfirmLoadVideo(videoEntities[index]);
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                ImageLoader(
+                                  assetEntity: videoEntities[index],
+                                  isImageFiles: false,
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          Utils.shortenTitle(
+                                              videoEntities[index].title),
                                           style: TextStyle(
                                             color: kPrimaryTextColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12.0,
-                                            fontFamily: "Roboto",
-                                          )),
-                                    ],
+                                          ),
+                                        ),
+                                        Text(
+                                            Utils.convertTimeVideos(
+                                                videoEntities[index].duration),
+                                            style: TextStyle(
+                                              color: kPrimaryTextColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12.0,
+                                              fontFamily: "Roboto",
+                                            )),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               )
