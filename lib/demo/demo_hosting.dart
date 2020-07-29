@@ -2,6 +2,7 @@ import 'package:firecast_app/services/hosting_service.dart';
 import 'package:flutter/material.dart';
 import 'package:dhttpd/dhttpd.dart' as server;
 import 'package:get_ip/get_ip.dart';
+import 'package:stream/stream.dart';
 
 class DemoHosting extends StatefulWidget {
   @override
@@ -13,18 +14,20 @@ class _DemoHostingState extends State<DemoHosting> {
   String location = "";
   String message = "";
   void startHosting() async {
-    location = await hostingService.startHosting("/storage/emulated/0");
-    setState(() {
-      if (hostingService.serverHttp != null) message = "Server hosted";
-    });
+//    location = await hostingService.startHosting("/storage/emulated/0");
+//    setState(() {
+//      if (hostingService.serverHttp != null) message = "Server hosted";
+//    });
+    String ipAddress = await GetIp.ipAddress;
+    StreamServer server = StreamServer(homeDir: "/storage/emulated/0");
+    HttpChannel channel = await server.start(port: 8082, address: ipAddress);
+    print(channel.address);
+    print(channel.port);
   }
 
   void stopHosting() async {
     await hostingService.stopHosting();
-    setState(() {
-      if (hostingService.serverHttp == null) message = "Server stopped";
-      location = "";
-    });
+    setState(() {});
   }
 
   @override

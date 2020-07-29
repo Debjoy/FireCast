@@ -16,13 +16,14 @@ class _DemoMediaState extends State<DemoMedia> {
 
   HostingService hostingService = HostingService();
   void getMedia() async {
+    PhotoManager.forceOldApi();
     List<AssetPathEntity> list =
         await PhotoManager.getAssetPathList(type: RequestType.video);
     List<AssetEntity> assetEntity = await list[2].assetList;
-    String mediaUrl = await assetEntity[0].getMediaUrl();
+    //String mediaUrl = await assetEntity[0].getMediaUrl();
     File file = await assetEntity[0].file;
-    location = await hostingService
-        .startHosting(file.path.substring(0, file.path.lastIndexOf("/")));
+    //location = await hostingService
+    //.startHosting(file.path.substring(0, file.path.lastIndexOf("/")));
     print(file.path);
     print(location);
   }

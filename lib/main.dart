@@ -10,8 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:firecast_app/keepalive/app_retain_widget.dart';
 import 'package:firecast_app/keepalive/background_main.dart';
 
-import 'package:back_button_interceptor/back_button_interceptor.dart';
-
 void main() {
   runApp(MyApp());
 

@@ -5,8 +5,12 @@ import 'package:flutter/material.dart';
 class ImageLoader extends StatefulWidget {
   final AssetEntity assetEntity;
   final bool isImageFiles;
+  final bool isCastImageMode;
   ImageLoader(
-      {@required this.assetEntity, @required this.isImageFiles, Key key})
+      {@required this.assetEntity,
+      @required this.isImageFiles,
+      this.isCastImageMode = false,
+      Key key})
       : super(key: key);
   @override
   _ImageLoaderState createState() => _ImageLoaderState();
@@ -18,17 +22,19 @@ class _ImageLoaderState extends State<ImageLoader> {
   Uint8List imageData;
   AssetEntity assetEntity;
   bool imageFailed = false;
+  bool isCastImageMode = false;
   bool isImageFiles;
   @override
   void initState() {
     super.initState();
     assetEntity = widget.assetEntity;
     isImageFiles = widget.isImageFiles;
+    isCastImageMode = widget.isCastImageMode;
     loadImage();
   }
 
   loadImage() async {
-    Uint8List data = await assetEntity.thumbData;
+    Uint8List data; //= await assetEntity.thumbData;
 
     setState(() {
       if (data == null) {
@@ -41,7 +47,7 @@ class _ImageLoaderState extends State<ImageLoader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: !isImageFiles ? 60.0 : 80.0,
+      height: (!isImageFiles || isCastImageMode) ? 60.0 : 80.0,
       width: !isImageFiles ? 80.0 : null,
       decoration: BoxDecoration(
         color:
@@ -93,8 +99,7 @@ class _PlayerImageLoaderState extends State<PlayerImageLoader> {
   }
 
   loadImage() async {
-    Uint8List data = await assetEntity.thumbData;
-
+    Uint8List data; //= await assetEntity.thumbData;
     setState(() {
       if (data == null) {
         imageFailed = true;

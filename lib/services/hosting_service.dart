@@ -1,25 +1,27 @@
 import 'package:dhttpd/dhttpd.dart' as server;
 import 'package:get_ip/get_ip.dart';
+import 'package:stream/stream.dart';
 
 class HostingService {
   String ipAddress = "";
-  server.Dhttpd serverHttp;
+  HttpChannel channel;
 
   Future<String> startHosting(String mediaDirectory) async {
     ipAddress = await GetIp.ipAddress;
-    if (serverHttp != null) {
-      serverHttp.destroy();
-      serverHttp = null;
+    if (channel != null) {
+      channel.close();
+      channel = null;
     }
     if (mediaDirectory == "") mediaDirectory = "/storage/emulated/0";
-    serverHttp = await server.Dhttpd.start(
-        port: 8082, address: ipAddress, path: mediaDirectory);
+
+    StreamServer server = StreamServer(homeDir: mediaDirectory);
+    channel = await server.start(port: 8082, address: ipAddress);
 
     return "http://$ipAddress:8082";
   }
 
   Future<void> stopHosting() async {
-    await serverHttp.destroy();
-    serverHttp = null;
+    await channel.close();
+    channel = null;
   }
 }

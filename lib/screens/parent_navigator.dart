@@ -20,7 +20,6 @@ import 'package:flutter_fling/remote_media_player.dart';
 import 'package:flutter_fling/flutter_fling.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 class ParentNavigator extends StatefulWidget {
   @override
@@ -150,7 +149,8 @@ class _ParentNavigatorState extends State<ParentNavigator> {
         assetEntity: entity,
         image: ImageLoader(
           assetEntity: entity,
-          isImageFiles: false,
+          isImageFiles: true,
+          isCastImageMode: true,
           key: UniqueKey(),
         ),
         isImage: true,
@@ -285,7 +285,8 @@ class _ParentNavigatorState extends State<ParentNavigator> {
         playerScreenPanel.open();
       });
       File tempFile = await entity.file;
-      print(tempFile.path);
+
+      print("halabala" + tempFile.path);
       await flingService.startMedia(tempFile.path,
           (state, condition, position) {
         if (state == MediaState.PreparingMedia) {
