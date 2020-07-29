@@ -3,7 +3,7 @@ import 'package:photo_manager/photo_manager.dart';
 
 class MediaService {
   MediaService() {
-    PhotoManager.forceOldApi();
+    //PhotoManager.forceOldApi();
   }
   Future<List<AssetPathEntity>> getVideoAssetFolders() async {
     List<AssetPathEntity> list = await PhotoManager.getAssetPathList(

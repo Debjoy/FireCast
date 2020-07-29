@@ -143,7 +143,7 @@ class _ParentNavigatorState extends State<ParentNavigator> {
     });
   }
 
-  castImageConfirmScreenLoad(AssetEntity entity) {
+  castImageConfirmScreenLoad(AssetEntity entity) async {
     setState(() {
       confirmCastPanelWidget = ConfirmAsset(
         assetEntity: entity,

@@ -34,7 +34,7 @@ class _ImageLoaderState extends State<ImageLoader> {
   }
 
   loadImage() async {
-    Uint8List data; //= await assetEntity.thumbData;
+    Uint8List data = await assetEntity.thumbData;
 
     setState(() {
       if (data == null) {
@@ -48,7 +48,7 @@ class _ImageLoaderState extends State<ImageLoader> {
   Widget build(BuildContext context) {
     return Container(
       height: (!isImageFiles || isCastImageMode) ? 60.0 : 80.0,
-      width: !isImageFiles ? 80.0 : null,
+      width: (!isImageFiles || isCastImageMode) ? 80.0 : null,
       decoration: BoxDecoration(
         color:
             isImageFiles ? Colors.orangeAccent[100] : Colors.indigoAccent[100],
@@ -99,7 +99,7 @@ class _PlayerImageLoaderState extends State<PlayerImageLoader> {
   }
 
   loadImage() async {
-    Uint8List data; //= await assetEntity.thumbData;
+    Uint8List data = await assetEntity.thumbData;
     setState(() {
       if (data == null) {
         imageFailed = true;
