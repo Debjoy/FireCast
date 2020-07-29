@@ -47,7 +47,10 @@ class FolderScreen extends StatelessWidget {
                       child: Text(
                         folderMode == FolderMode.VIDEO ? "Videos" : "Images",
                         style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                            color: kPrimaryTextColor,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Roboto"),
                       ),
                     ),
                   ),
@@ -101,7 +104,9 @@ class FolderScreen extends StatelessWidget {
                                               : assetFolders[index].name,
                                           style: TextStyle(
                                               fontSize: 20.0,
-                                              fontWeight: FontWeight.bold),
+                                              color: kPrimaryTextColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: "Roboto"),
                                         ),
                                       ),
                                       Text(
@@ -109,7 +114,9 @@ class FolderScreen extends StatelessWidget {
                                             (folderMode == FolderMode.VIDEO
                                                 ? "videos"
                                                 : "images"),
-                                        style: TextStyle(color: Colors.black45),
+                                        style: TextStyle(
+                                            color: kSubTextColor,
+                                            fontFamily: "Roboto"),
                                       ),
                                     ],
                                   ),
@@ -130,7 +137,7 @@ class FolderScreen extends StatelessWidget {
       floatingActionButton: playerStarted
           ? FloatingActionButton(
               onPressed: onFabButtonPressed,
-              backgroundColor: Colors.blueGrey.shade900,
+              backgroundColor: kPrimaryTextColor,
               child: Icon(Icons.cast_connected),
             )
           : null,

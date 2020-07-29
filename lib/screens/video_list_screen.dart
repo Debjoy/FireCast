@@ -41,7 +41,10 @@ class VideoListScreen extends StatelessWidget {
                       child: Text(
                         "Videos",
                         style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                            color: kPrimaryTextColor,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Roboto"),
                       ),
                     ),
                   ),
@@ -83,14 +86,21 @@ class VideoListScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text(Utils.shortenTitle(
-                                          videoEntities[index].title)),
+                                      Text(
+                                        Utils.shortenTitle(
+                                            videoEntities[index].title),
+                                        style: TextStyle(
+                                          color: kPrimaryTextColor,
+                                        ),
+                                      ),
                                       Text(
                                           Utils.convertTimeVideos(
                                               videoEntities[index].duration),
                                           style: TextStyle(
+                                            color: kPrimaryTextColor,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12.0,
+                                            fontFamily: "Roboto",
                                           )),
                                     ],
                                   ),
@@ -111,7 +121,7 @@ class VideoListScreen extends StatelessWidget {
       floatingActionButton: playerStarted
           ? FloatingActionButton(
               onPressed: onFabButtonPressed,
-              backgroundColor: Colors.blueGrey.shade900,
+              backgroundColor: kPrimaryTextColor,
               child: Icon(Icons.cast_connected),
             )
           : null,

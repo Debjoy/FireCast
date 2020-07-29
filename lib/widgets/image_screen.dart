@@ -45,13 +45,16 @@ class ImageScreen extends StatelessWidget {
                     child: Text(
                       "Currently Showing",
                       style: TextStyle(
-                          fontSize: 19.0, fontWeight: FontWeight.bold),
+                          color: kPrimaryTextColor,
+                          fontSize: 19.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Roboto"),
                     ),
                   ),
                   InkWell(
                       borderRadius: BorderRadius.all(Radius.circular(40.0)),
                       onTap: onCollapse,
-                      child: Icon(Icons.expand_more)),
+                      child: Icon(Icons.expand_more, color: kPrimaryTextColor)),
                 ],
               ),
               SizedBox(height: 20.0),

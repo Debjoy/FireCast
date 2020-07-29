@@ -11,8 +11,9 @@ enum FolderMode {
   VIDEO,
   IMAGE,
 }
-const kPrimaryTextColor = Color(0xff454545);
-const kBorderColor = Color(0xffefefef);
+const kPrimaryTextColor = Color(0xFF1A242E);
+const kSubTextColor = Color(0x881A242E);
+const kBorderColor = Color(0xFFF3F3F3);
 
 class Utils {
   static String convertTimeVideos(int secs) {

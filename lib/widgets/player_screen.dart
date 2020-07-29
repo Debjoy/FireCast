@@ -68,13 +68,16 @@ class PlayerScreen extends StatelessWidget {
                     child: Text(
                       "Currently Showing",
                       style: TextStyle(
-                          fontSize: 19.0, fontWeight: FontWeight.bold),
+                          color: kPrimaryTextColor,
+                          fontSize: 19.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Roboto"),
                     ),
                   ),
                   InkWell(
                       borderRadius: BorderRadius.all(Radius.circular(40.0)),
                       onTap: onCollapsed,
-                      child: Icon(Icons.expand_more)),
+                      child: Icon(Icons.expand_more, color: kPrimaryTextColor)),
                 ],
               ),
               SizedBox(height: 20.0),
@@ -148,7 +151,8 @@ class PlayerScreen extends StatelessWidget {
                         Utils.convertTimeVideos(currentPlayerPosition.toInt()),
                         style: TextStyle(
                             color: kPrimaryTextColor,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Roboto"),
                       ),
                       Expanded(
                         child: Container(),
@@ -157,7 +161,8 @@ class PlayerScreen extends StatelessWidget {
                         Utils.convertTimeVideos(assetEntity.duration),
                         style: TextStyle(
                             color: kPrimaryTextColor,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Roboto"),
                       )
                     ],
                   ),

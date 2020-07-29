@@ -38,7 +38,10 @@ class HomeScreen extends StatelessWidget {
                       child: Text(
                         "Hi,",
                         style: TextStyle(
-                            fontSize: 50.0, fontWeight: FontWeight.bold),
+                            fontSize: 50.0,
+                            color: kPrimaryTextColor,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Roboto"),
                       ),
                     ),
                   ),
@@ -53,8 +56,10 @@ class HomeScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
                 child: Text("what do you want to watch on your FireTv today?",
                     style: TextStyle(
+                      color: kPrimaryTextColor,
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
+                      fontFamily: "Roboto",
                     )),
               ),
               ConnectionInfo(
@@ -70,7 +75,7 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: playerStarted
           ? FloatingActionButton(
-              backgroundColor: Colors.blueGrey.shade900,
+              backgroundColor: kPrimaryTextColor,
               onPressed: onFabButtonPressed,
               child: Icon(Icons.cast_connected),
             )
@@ -142,7 +147,10 @@ class ConnectionInfo extends StatelessWidget {
                         Text(
                           "You are,",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15.0),
+                              color: kPrimaryTextColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                              fontFamily: "Roboto"),
                         ),
                         isConnected
                             ? Text(
@@ -150,14 +158,16 @@ class ConnectionInfo extends StatelessWidget {
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.0,
-                                    color: Colors.green),
+                                    color: Colors.green,
+                                    fontFamily: "Roboto"),
                               )
                             : Text(
                                 "Disconnected",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.0,
-                                    color: Colors.red),
+                                    color: Colors.red,
+                                    fontFamily: "Roboto"),
                               ),
                       ],
                     ),
@@ -195,6 +205,7 @@ class ConnectionInfo extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
+                                fontFamily: "Roboto",
                                 color: isConnected
                                     ? kPrimaryTextColor
                                     : Colors.white,
@@ -223,7 +234,11 @@ class ConnectionInfo extends StatelessWidget {
                     top: 20.0, left: 20.0, right: 20.0, bottom: 10.0),
                 child: Text(
                   "You are connected to,",
-                  style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: kPrimaryTextColor,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Roboto"),
                 ),
               ),
               (selectedDevice != null)
@@ -245,7 +260,8 @@ class ConnectionInfo extends StatelessWidget {
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18.0,
-                                    fontWeight: FontWeight.bold)),
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Roboto")),
                           )
                         ],
                       ),
@@ -258,7 +274,9 @@ class ConnectionInfo extends StatelessWidget {
                           Text(
                             "No Devices",
                             style: TextStyle(
-                                color: Colors.black54, fontSize: 18.0),
+                                color: Colors.black54,
+                                fontSize: 18.0,
+                                fontFamily: "Roboto"),
                           ),
                           SizedBox(
                             width: 5.0,
@@ -305,7 +323,11 @@ class MediaTypeSelector extends StatelessWidget {
           ),
           Text(
             title,
-            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 25.0,
+                color: kPrimaryTextColor,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Roboto"),
           )
         ],
       ),

@@ -37,7 +37,10 @@ class LoadingPlayerScreen extends StatelessWidget {
                     child: Text(
                       "Currently Showing",
                       style: TextStyle(
-                          fontSize: 19.0, fontWeight: FontWeight.bold),
+                          color: kPrimaryTextColor,
+                          fontSize: 19.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Roboto"),
                     ),
                   ),
                   InkWell(
@@ -66,7 +69,8 @@ class LoadingPlayerScreen extends StatelessWidget {
                             color: Colors.black26,
                             fontSize: 25.0,
                             fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.none),
+                            decoration: TextDecoration.none,
+                            fontFamily: "Roboto"),
                       ),
                     ),
                   ],

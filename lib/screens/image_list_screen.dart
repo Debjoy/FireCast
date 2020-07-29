@@ -39,7 +39,10 @@ class ImageListScreen extends StatelessWidget {
                       child: Text(
                         "Images",
                         style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                            color: kPrimaryTextColor,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Roboto"),
                       ),
                     ),
                   ),
@@ -129,8 +132,10 @@ class ImageListScreen extends StatelessWidget {
       floatingActionButton: playerStarted
           ? FloatingActionButton(
               onPressed: onFabButtonPressed,
-              backgroundColor: Colors.blueGrey.shade900,
-              child: Icon(Icons.cast_connected),
+              backgroundColor: kPrimaryTextColor,
+              child: Icon(
+                Icons.cast_connected,
+              ),
             )
           : null,
     );

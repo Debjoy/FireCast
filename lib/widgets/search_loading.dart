@@ -30,10 +30,11 @@ class SearchLoading extends StatelessWidget {
             child: Text(
               "Searching",
               style: TextStyle(
-                  color: Colors.black26,
+                  color: Colors.black45,
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none),
+                  decoration: TextDecoration.none,
+                  fontFamily: "Roboto"),
             ),
           ),
         ],

@@ -432,8 +432,9 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.light().copyWith(
-          textTheme: TextTheme()
-              .copyWith(bodyText2: TextStyle(color: kPrimaryTextColor))),
+          textTheme: TextTheme().copyWith(
+              bodyText2:
+                  TextStyle(color: kPrimaryTextColor, fontFamily: "Roboto"))),
       home: WillPopScope(
         onWillPop: backPressed,
         child: MaterialApp(

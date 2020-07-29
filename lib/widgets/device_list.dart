@@ -36,6 +36,7 @@ class DeviceList extends StatelessWidget {
                   fontSize: 18.0,
                   color: kPrimaryTextColor,
                   decoration: TextDecoration.none,
+                  fontFamily: "Roboto",
                 ),
               ),
               Expanded(
@@ -67,6 +68,7 @@ class DeviceList extends StatelessWidget {
                                           fontSize: 17.0,
                                           fontWeight: FontWeight.bold,
                                           decoration: TextDecoration.none,
+                                          fontFamily: "Roboto",
                                         )),
                                     Text("click to connect",
                                         style: TextStyle(
@@ -74,6 +76,7 @@ class DeviceList extends StatelessWidget {
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.normal,
                                           decoration: TextDecoration.none,
+                                          fontFamily: "Roboto",
                                         )),
                                   ],
                                 ),

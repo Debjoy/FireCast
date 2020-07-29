@@ -34,6 +34,7 @@ class NoDevices extends StatelessWidget {
                   color: kPrimaryTextColor,
                   decoration: TextDecoration.none,
                   fontWeight: FontWeight.bold,
+                  fontFamily: "Roboto",
                 ),
               ),
               Expanded(
@@ -51,6 +52,7 @@ class NoDevices extends StatelessWidget {
                             fontSize: 18.0,
                             color: Colors.black45,
                             decoration: TextDecoration.none,
+                            fontFamily: "Roboto",
                           )),
                       SizedBox(height: 10.0),
                       InkWell(
@@ -78,7 +80,8 @@ class NoDevices extends StatelessWidget {
                                       fontSize: 20.0,
                                       decoration: TextDecoration.none,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                      color: Colors.white,
+                                      fontFamily: "Roboto"),
                                 ),
                                 SizedBox(
                                   width: 10,

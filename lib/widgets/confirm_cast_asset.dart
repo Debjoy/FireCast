@@ -40,7 +40,11 @@ class ConfirmAsset extends StatelessWidget {
               children: <Widget>[
                 Text(
                   "Selected ${isImage ? "Image" : "Video"}",
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: kPrimaryTextColor,
+                      fontFamily: "Roboto"),
                 ),
                 SizedBox(
                   height: 20.0,
@@ -56,15 +60,20 @@ class ConfirmAsset extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(Utils.shortenTitle(assetEntity.title)),
+                            Text(Utils.shortenTitle(assetEntity.title),
+                                style: TextStyle(
+                                    color: kPrimaryTextColor,
+                                    fontFamily: "Roboto")),
                             isImage
                                 ? Container()
                                 : Text(
                                     Utils.convertTimeVideos(
                                         assetEntity.duration),
                                     style: TextStyle(
+                                      color: kPrimaryTextColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12.0,
+                                      fontFamily: "Roboto",
                                     )),
                           ],
                         ),
@@ -77,7 +86,11 @@ class ConfirmAsset extends StatelessWidget {
                 ),
                 Text(
                   "Cast the selected ${isImage ? "image" : "video"}?",
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: kPrimaryTextColor,
+                      fontFamily: "Roboto"),
                 ),
                 SizedBox(height: 10.0),
                 Row(
@@ -108,6 +121,7 @@ class ConfirmAsset extends StatelessWidget {
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
+                                    fontFamily: "Roboto",
                                   )),
                               SizedBox(
                                 width: 10,
@@ -139,8 +153,10 @@ class ConfirmAsset extends StatelessWidget {
                             children: <Widget>[
                               Text("Cancel",
                                   style: TextStyle(
+                                    color: kPrimaryTextColor,
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: "Roboto",
                                   )),
                             ],
                           ),

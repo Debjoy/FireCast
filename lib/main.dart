@@ -11,6 +11,13 @@ import 'package:firecast_app/keepalive/app_retain_widget.dart';
 import 'package:firecast_app/keepalive/background_main.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.white, // navigation bar color
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark
+      // status bar color
+      ));
   runApp(MyApp());
 
   var channel = const MethodChannel('com.example/background_service');
