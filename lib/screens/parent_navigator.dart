@@ -7,6 +7,7 @@ import 'package:firecast_app/services/fling_service.dart';
 import 'package:firecast_app/services/media_service.dart';
 import 'package:firecast_app/utils/constants.dart';
 import 'package:firecast_app/widgets/confirm_cast_asset.dart';
+import 'package:firecast_app/widgets/confirm_exit_app.dart';
 import 'package:firecast_app/widgets/image_loader_widget.dart';
 import 'package:firecast_app/widgets/image_screen.dart';
 import 'package:firecast_app/widgets/loading_player.dart';
@@ -15,6 +16,7 @@ import 'package:firecast_app/widgets/search_loading.dart';
 import 'package:firecast_app/widgets/no_devices_widget.dart';
 import 'package:firecast_app/widgets/device_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_fling/remote_media_player.dart';
 import 'package:flutter_fling/flutter_fling.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -51,6 +53,8 @@ class _ParentNavigatorState extends State<ParentNavigator> {
 
   PanelController playerScreenPanel = PanelController();
   Widget playerScreenWidget = Container();
+
+  PanelController exitConfirmPanel = PanelController();
 
   //PLAYER VALUES
   double currentPlayerPosition = 0;
@@ -216,7 +220,7 @@ class _ParentNavigatorState extends State<ParentNavigator> {
             playerScreenPanel.close();
             castImageConfirmScreenLoad(imageEntityQueue[index]);
           }
-        }, //TODO: Play Next Media
+        },
         onPlayPreviousMedia: () {
           int index = imageEntityQueue.indexOf(entity);
           if (index > -1 && imageEntityQueue.length > 0) {
@@ -227,7 +231,7 @@ class _ParentNavigatorState extends State<ParentNavigator> {
             playerScreenPanel.close();
             castImageConfirmScreenLoad(imageEntityQueue[index]);
           }
-        }, //TODO: Play Previous Media
+        },
         doHardRefresh: true,
       );
     });
@@ -441,7 +445,10 @@ class _ParentNavigatorState extends State<ParentNavigator> {
 
   Future<bool> backPressed() async {
     print(pageStates);
-    if (playerScreenPanel.isPanelOpen) {
+    if (exitConfirmPanel.isPanelOpen) {
+      exitConfirmPanel.close();
+      return await Future.value(false);
+    } else if (playerScreenPanel.isPanelOpen) {
       playerScreenPanel.close();
       return await Future.value(false);
     } else if (searchDevicePanel.isPanelOpen) {
@@ -454,7 +461,8 @@ class _ParentNavigatorState extends State<ParentNavigator> {
     if (pageStates.last == PageState.HOME_SCREEN) {
       pageStates.clear();
       pageStates.add(PageState.HOME_SCREEN);
-      //SystemNavigator.pop()
+      //SystemNavigator.pop(animated: true);
+      exitConfirmPanel.open();
       return await Future.value(false);
     } else {
       pageStates.removeLast();
@@ -473,21 +481,22 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.light().copyWith(
+          textTheme: TextTheme().copyWith(
+              bodyText2:
+                  TextStyle(color: kPrimaryTextColor, fontFamily: "Roboto"))),
       home: WillPopScope(
         onWillPop: backPressed,
-        child: MaterialApp(
-          theme: ThemeData.light().copyWith(
-              textTheme: TextTheme().copyWith(
-                  bodyText2: TextStyle(
-                      color: kPrimaryTextColor, fontFamily: "Roboto"))),
-          home: ParentStack(
-              mMAINBODY: mMAINBODY,
-              confirmCastPanel: confirmCastPanel,
-              confirmCastPanelWidget: confirmCastPanelWidget,
-              searchDevicePanel: searchDevicePanel,
-              searchPanelCurrentState: searchPanelCurrentState,
-              playerScreenPanel: playerScreenPanel,
-              playerScreenWidget: playerScreenWidget),
+        child: ParentStack(
+          mMAINBODY: mMAINBODY,
+          confirmCastPanel: confirmCastPanel,
+          confirmCastPanelWidget: confirmCastPanelWidget,
+          searchDevicePanel: searchDevicePanel,
+          searchPanelCurrentState: searchPanelCurrentState,
+          playerScreenPanel: playerScreenPanel,
+          playerScreenWidget: playerScreenWidget,
+          exitConfirmPanel: exitConfirmPanel,
+          stopFireTvConnection: stopFireTvConnection,
         ),
       ),
     );
@@ -495,16 +504,18 @@ class _ParentNavigatorState extends State<ParentNavigator> {
 }
 
 class ParentStack extends StatelessWidget {
-  const ParentStack({
-    Key key,
-    @required this.mMAINBODY,
-    @required this.confirmCastPanel,
-    @required this.confirmCastPanelWidget,
-    @required this.searchDevicePanel,
-    @required this.searchPanelCurrentState,
-    @required this.playerScreenPanel,
-    @required this.playerScreenWidget,
-  }) : super(key: key);
+  const ParentStack(
+      {Key key,
+      @required this.mMAINBODY,
+      @required this.confirmCastPanel,
+      @required this.confirmCastPanelWidget,
+      @required this.searchDevicePanel,
+      @required this.searchPanelCurrentState,
+      @required this.playerScreenPanel,
+      @required this.playerScreenWidget,
+      @required this.exitConfirmPanel,
+      @required this.stopFireTvConnection})
+      : super(key: key);
 
   final Widget mMAINBODY;
   final PanelController confirmCastPanel;
@@ -513,12 +524,30 @@ class ParentStack extends StatelessWidget {
   final Widget searchPanelCurrentState;
   final PanelController playerScreenPanel;
   final Widget playerScreenWidget;
+  final PanelController exitConfirmPanel;
+  final Function stopFireTvConnection;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
         mMAINBODY,
+        SlidingUpPanel(
+          renderPanelSheet: false,
+          minHeight: 0,
+          maxHeight: 270,
+          backdropEnabled: true,
+          controller: exitConfirmPanel,
+          panel: ConfirmExitApp(
+            onCancelExit: () {
+              exitConfirmPanel.close();
+            },
+            onExitApp: () {
+              stopFireTvConnection();
+              SystemNavigator.pop(animated: true);
+            },
+          ),
+        ),
         SlidingUpPanel(
           renderPanelSheet: false,
           minHeight: 0,
