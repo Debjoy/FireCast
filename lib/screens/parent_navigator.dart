@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firecast_app/screens/folder_screen.dart';
 import 'package:firecast_app/screens/home_screen.dart';
 import 'package:firecast_app/screens/video_list_screen.dart';
@@ -34,7 +33,9 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   List<AssetPathEntity> videoFolders = [];
   List<AssetPathEntity> imageFolders = [];
   List<AssetEntity> videoEntities = [];
+  List<AssetEntity> videoEntityQueue = [];
   List<AssetEntity> imageEntities = [];
+  List<AssetEntity> imageEntityQueue = [];
   List<PageState> pageStates = [];
   FlingService flingService = FlingService();
   List<RemoteMediaPlayer> flingDevices;
@@ -165,8 +166,8 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   }
 
   castImage(AssetEntity entity) async {
-    //TODO: check if connected
     if (flingService.getCurrentDevice() != null) {
+      imageEntityQueue = imageEntities;
       playerLoadingMessages("Loading Media");
       playerStarted = true;
       NavigationSystem();
@@ -205,8 +206,28 @@ class _ParentNavigatorState extends State<ParentNavigator> {
         onCollapse: () {
           playerScreenPanel.close();
         },
-        onPlayNextMedia: () {}, //TODO: Play Next Media
-        onPlayPreviousMedia: () {}, //TODO: Play Previous Media
+        onPlayNextMedia: () {
+          int index = imageEntityQueue.indexOf(entity);
+          if (index > -1 && imageEntityQueue.length > 0) {
+            index++;
+            if (index == imageEntityQueue.length) {
+              index = 0;
+            }
+            playerScreenPanel.close();
+            castImageConfirmScreenLoad(imageEntityQueue[index]);
+          }
+        }, //TODO: Play Next Media
+        onPlayPreviousMedia: () {
+          int index = imageEntityQueue.indexOf(entity);
+          if (index > -1 && imageEntityQueue.length > 0) {
+            index--;
+            if (index == -1) {
+              index = imageEntityQueue.length - 1;
+            }
+            playerScreenPanel.close();
+            castImageConfirmScreenLoad(imageEntityQueue[index]);
+          }
+        }, //TODO: Play Previous Media
         doHardRefresh: true,
       );
     });
@@ -251,8 +272,28 @@ class _ParentNavigatorState extends State<ParentNavigator> {
         onCollapsed: () {
           playerScreenPanel.close();
         },
-        onPlayPreviousMedia: () {}, //TODO: Play previous Media
-        onPlayNextMedia: () {}, //TODO: play next media
+        onPlayPreviousMedia: () {
+          int index = videoEntityQueue.indexOf(entity);
+          if (index > -1 && videoEntityQueue.length > 0) {
+            index--;
+            if (index == -1) {
+              index = videoEntityQueue.length - 1;
+            }
+            playerScreenPanel.close();
+            castVideoConfirmScreenLoad(videoEntityQueue[index]);
+          }
+        },
+        onPlayNextMedia: () {
+          int index = videoEntityQueue.indexOf(entity);
+          if (index > -1 && videoEntityQueue.length > 0) {
+            index++;
+            if (index == videoEntityQueue.length) {
+              index = 0;
+            }
+            playerScreenPanel.close();
+            castVideoConfirmScreenLoad(videoEntityQueue[index]);
+          }
+        },
         doHardRefresh: hardRefresh,
       );
     });
@@ -274,6 +315,7 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   castVideo(AssetEntity entity) async {
     if (flingService.getCurrentDevice() != null) {
       //loadPlayerScreen(entity, true);
+      videoEntityQueue = videoEntities;
       playerStarted = true;
       NavigationSystem();
       playerLoadingMessages("Loading Media");
@@ -431,13 +473,13 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light().copyWith(
-          textTheme: TextTheme().copyWith(
-              bodyText2:
-                  TextStyle(color: kPrimaryTextColor, fontFamily: "Roboto"))),
       home: WillPopScope(
         onWillPop: backPressed,
         child: MaterialApp(
+          theme: ThemeData.light().copyWith(
+              textTheme: TextTheme().copyWith(
+                  bodyText2: TextStyle(
+                      color: kPrimaryTextColor, fontFamily: "Roboto"))),
           home: ParentStack(
               mMAINBODY: mMAINBODY,
               confirmCastPanel: confirmCastPanel,
