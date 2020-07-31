@@ -24,6 +24,7 @@ class _ImageLoaderState extends State<ImageLoader> {
   bool imageFailed = false;
   bool isCastImageMode = false;
   bool isImageFiles;
+  bool isCorrupt = false;
   @override
   void initState() {
     super.initState();
@@ -34,14 +35,23 @@ class _ImageLoaderState extends State<ImageLoader> {
   }
 
   loadImage() async {
-    Uint8List data = await assetEntity.thumbData;
+    String extension =
+        assetEntity.title.substring(assetEntity.title.lastIndexOf(".") + 1);
+    if (extension != "mkv") {
+      Uint8List data = await assetEntity.thumbData;
 
-    setState(() {
-      if (data == null) {
-        imageFailed = true;
-      }
-      imageData = data;
-    });
+      setState(() {
+        if (data == null) {
+          imageFailed = true;
+        }
+        imageData = data;
+      });
+    }
+    {
+      setState(() {
+        isCorrupt = true;
+      });
+    }
   }
 
   @override
@@ -64,7 +74,9 @@ class _ImageLoaderState extends State<ImageLoader> {
           ? Container(
               padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
               child: Icon(
-                isImageFiles ? Icons.image : Icons.videocam,
+                isCorrupt
+                    ? Icons.broken_image
+                    : (isImageFiles ? Icons.image : Icons.videocam),
                 color: Colors.white70,
               ),
             )
