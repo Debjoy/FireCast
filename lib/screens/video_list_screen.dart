@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:firecast_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -10,11 +11,13 @@ class VideoListScreen extends StatelessWidget {
       {@required this.videoEntities,
       @required this.onConfirmLoadVideo,
       @required this.playerStarted,
-      @required this.onFabButtonPressed});
+      @required this.onFabButtonPressed,
+      @required this.navigationController});
   final List<AssetEntity> videoEntities;
   final Function onConfirmLoadVideo;
   final bool playerStarted;
   final Function onFabButtonPressed;
+  final FancyDrawerController navigationController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,10 +51,16 @@ class VideoListScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Icon(
-                    Icons.menu,
-                    size: 40.0,
-                    color: kPrimaryTextColor,
+                  InkWell(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    onTap: () {
+                      navigationController.open();
+                    },
+                    child: Icon(
+                      Icons.menu,
+                      size: 40.0,
+                      color: kPrimaryTextColor,
+                    ),
                   ),
                 ],
               ),

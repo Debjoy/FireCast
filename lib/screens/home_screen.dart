@@ -1,3 +1,4 @@
+import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:firecast_app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ class HomeScreen extends StatelessWidget {
       @required this.goToVideos,
       @required this.selectedDevice,
       @required this.playerStarted,
-      @required this.onFabButtonPressed});
+      @required this.onFabButtonPressed,
+      @required this.navigationController});
   final Function findDevices;
   final bool isConnected;
   final Function goToVideos;
@@ -20,13 +22,14 @@ class HomeScreen extends StatelessWidget {
   final RemoteMediaPlayer selectedDevice;
   final bool playerStarted;
   final Function onFabButtonPressed;
+  final FancyDrawerController navigationController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 50.0),
+          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 32.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -45,10 +48,16 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Icon(
-                    Icons.menu,
-                    size: 40.0,
-                    color: kPrimaryTextColor,
+                  InkWell(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    onTap: () {
+                      navigationController.open();
+                    },
+                    child: Icon(
+                      Icons.menu,
+                      size: 40.0,
+                      color: kPrimaryTextColor,
+                    ),
                   ),
                 ],
               ),

@@ -1,3 +1,4 @@
+import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:firecast_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -8,11 +9,13 @@ class ImageListScreen extends StatelessWidget {
       {@required this.imageEntities,
       @required this.onConfirmLoadImage,
       @required this.playerStarted,
-      @required this.onFabButtonPressed});
+      @required this.onFabButtonPressed,
+      @required this.navigationController});
   final List<AssetEntity> imageEntities;
   final Function onConfirmLoadImage;
   final bool playerStarted;
   final Function onFabButtonPressed;
+  final FancyDrawerController navigationController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,10 +49,16 @@ class ImageListScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Icon(
-                    Icons.menu,
-                    size: 40.0,
-                    color: kPrimaryTextColor,
+                  InkWell(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    onTap: () {
+                      navigationController.open();
+                    },
+                    child: Icon(
+                      Icons.menu,
+                      size: 40.0,
+                      color: kPrimaryTextColor,
+                    ),
                   ),
                 ],
               ),

@@ -1,3 +1,4 @@
+import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:firecast_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -9,13 +10,15 @@ class FolderScreen extends StatelessWidget {
       @required this.assetFolders,
       @required this.folderMode,
       @required this.playerStarted,
-      @required this.onFabButtonPressed});
+      @required this.onFabButtonPressed,
+      @required this.navigationController});
   final Function loadImageList;
   final Function loadVideoList;
   final List<AssetPathEntity> assetFolders;
   final FolderMode folderMode;
   final bool playerStarted;
   final Function onFabButtonPressed;
+  final FancyDrawerController navigationController;
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +57,16 @@ class FolderScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Icon(
-                    Icons.menu,
-                    size: 40.0,
-                    color: kPrimaryTextColor,
+                  InkWell(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    onTap: () {
+                      navigationController.open();
+                    },
+                    child: Icon(
+                      Icons.menu,
+                      size: 40.0,
+                      color: kPrimaryTextColor,
+                    ),
                   ),
                 ],
               ),

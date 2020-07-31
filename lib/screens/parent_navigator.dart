@@ -21,13 +21,16 @@ import 'package:flutter_fling/remote_media_player.dart';
 import 'package:flutter_fling/flutter_fling.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:fancy_drawer/fancy_drawer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ParentNavigator extends StatefulWidget {
   @override
   _ParentNavigatorState createState() => _ParentNavigatorState();
 }
 
-class _ParentNavigatorState extends State<ParentNavigator> {
+class _ParentNavigatorState extends State<ParentNavigator>
+    with TickerProviderStateMixin {
   bool fireTvConnected = false;
   Widget mMAINBODY = Container();
   MediaService mediaService = MediaService();
@@ -61,6 +64,10 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   String playerLoadingMessage = "";
   bool isPlaying = false;
   bool isMuted = false;
+
+  bool playerRefreshFlag = false;
+
+  FancyDrawerController _navigationController;
 
   selectPlayerByIndex(int index) {
     flingService.selectDevice(flingDevices[index]);
@@ -173,6 +180,7 @@ class _ParentNavigatorState extends State<ParentNavigator> {
     if (flingService.getCurrentDevice() != null) {
       imageEntityQueue = imageEntities;
       playerLoadingMessages("Loading Media");
+      playerRefreshFlag = true;
       playerStarted = true;
       NavigationSystem();
       setState(() {
@@ -320,6 +328,7 @@ class _ParentNavigatorState extends State<ParentNavigator> {
     if (flingService.getCurrentDevice() != null) {
       //loadPlayerScreen(entity, true);
       videoEntityQueue = videoEntities;
+      playerRefreshFlag = true;
       playerStarted = true;
       NavigationSystem();
       playerLoadingMessages("Loading Media");
@@ -343,17 +352,16 @@ class _ParentNavigatorState extends State<ParentNavigator> {
           currentPlayerPosition = position / 1000;
           if (state == MediaState.Playing) {
             isPlaying = true;
-            loadPlayerScreen(entity);
           } else if (state == MediaState.Paused) {
             isPlaying = false;
-            loadPlayerScreen(entity);
           } else if (state == MediaState.Seeking) {
-            loadPlayerScreen(entity);
           } else if (state == MediaState.ReadyToPlay) {
+          } else {}
+          if (playerRefreshFlag) {
             loadPlayerScreen(entity, true);
-          } else {
+            playerRefreshFlag = false;
+          } else
             loadPlayerScreen(entity);
-          }
         }
         if (condition == MediaCondition.Good ||
             condition == MediaCondition.WarningBandwidth ||
@@ -366,6 +374,9 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   // ignore: non_constant_identifier_names
   void NavigationSystem() {
     if (pageStates.length == 0 || currentPageState != pageStates.last) {
+      if (pageStates.contains(currentPageState)) {
+        pageStates.remove(currentPageState);
+      }
       pageStates.add(currentPageState);
     }
     if (currentPageState == PageState.HOME_SCREEN) {
@@ -394,58 +405,69 @@ class _ParentNavigatorState extends State<ParentNavigator> {
           onFabButtonPressed: () {
             playerScreenPanel.open();
           },
+          navigationController: _navigationController,
         );
       });
     } else if (currentPageState == PageState.FOLDER_VIDEO_SCREEN) {
       setState(() {
         mMAINBODY = FolderScreen(
-            loadVideoList: loadVideoListPage,
-            loadImageList: loadImageListPage,
-            assetFolders: videoFolders,
-            folderMode: FolderMode.VIDEO,
-            playerStarted: playerStarted,
-            onFabButtonPressed: () {
-              playerScreenPanel.open();
-            });
+          loadVideoList: loadVideoListPage,
+          loadImageList: loadImageListPage,
+          assetFolders: videoFolders,
+          folderMode: FolderMode.VIDEO,
+          playerStarted: playerStarted,
+          onFabButtonPressed: () {
+            playerScreenPanel.open();
+          },
+          navigationController: _navigationController,
+        );
       });
     } else if (currentPageState == PageState.FOLDER_IMAGE_SCREEN) {
       setState(() {
         mMAINBODY = FolderScreen(
-            loadVideoList: loadVideoListPage,
-            loadImageList: loadImageListPage,
-            assetFolders: imageFolders,
-            folderMode: FolderMode.IMAGE,
-            playerStarted: playerStarted,
-            onFabButtonPressed: () {
-              playerScreenPanel.open();
-            });
+          loadVideoList: loadVideoListPage,
+          loadImageList: loadImageListPage,
+          assetFolders: imageFolders,
+          folderMode: FolderMode.IMAGE,
+          playerStarted: playerStarted,
+          onFabButtonPressed: () {
+            playerScreenPanel.open();
+          },
+          navigationController: _navigationController,
+        );
       });
     } else if (currentPageState == PageState.VIDEO_LIST_SCREEN) {
       setState(() {
         mMAINBODY = VideoListScreen(
-            videoEntities: videoEntities,
-            onConfirmLoadVideo: castVideoConfirmScreenLoad,
-            playerStarted: playerStarted,
-            onFabButtonPressed: () {
-              playerScreenPanel.open();
-            });
+          videoEntities: videoEntities,
+          onConfirmLoadVideo: castVideoConfirmScreenLoad,
+          playerStarted: playerStarted,
+          onFabButtonPressed: () {
+            playerScreenPanel.open();
+          },
+          navigationController: _navigationController,
+        );
       });
     } else if (currentPageState == PageState.IMAGE_LIST_SCREEN) {
       setState(() {
         mMAINBODY = ImageListScreen(
-            imageEntities: imageEntities,
-            onConfirmLoadImage: castImageConfirmScreenLoad,
-            playerStarted: playerStarted,
-            onFabButtonPressed: () {
-              playerScreenPanel.open();
-            });
+          imageEntities: imageEntities,
+          onConfirmLoadImage: castImageConfirmScreenLoad,
+          playerStarted: playerStarted,
+          onFabButtonPressed: () {
+            playerScreenPanel.open();
+          },
+          navigationController: _navigationController,
+        );
       });
     }
   }
 
   Future<bool> backPressed() async {
     print(pageStates);
-    if (exitConfirmPanel.isPanelOpen) {
+    if (_navigationController.percentOpen > 0) {
+      _navigationController.close();
+    } else if (exitConfirmPanel.isPanelOpen) {
       exitConfirmPanel.close();
       return await Future.value(false);
     } else if (playerScreenPanel.isPanelOpen) {
@@ -457,8 +479,7 @@ class _ParentNavigatorState extends State<ParentNavigator> {
     } else if (confirmCastPanel.isPanelOpen) {
       confirmCastPanel.close();
       return await Future.value(false);
-    }
-    if (pageStates.last == PageState.HOME_SCREEN) {
+    } else if (pageStates.last == PageState.HOME_SCREEN) {
       pageStates.clear();
       pageStates.add(PageState.HOME_SCREEN);
       //SystemNavigator.pop(animated: true);
@@ -475,6 +496,11 @@ class _ParentNavigatorState extends State<ParentNavigator> {
   @override
   void initState() {
     super.initState();
+    _navigationController = FancyDrawerController(
+        vsync: this, duration: Duration(milliseconds: 100))
+      ..addListener(() {
+        setState(() {}); // Must call setState
+      });
     NavigationSystem();
   }
 
@@ -487,16 +513,192 @@ class _ParentNavigatorState extends State<ParentNavigator> {
                   TextStyle(color: kPrimaryTextColor, fontFamily: "Roboto"))),
       home: WillPopScope(
         onWillPop: backPressed,
-        child: ParentStack(
-          mMAINBODY: mMAINBODY,
-          confirmCastPanel: confirmCastPanel,
-          confirmCastPanelWidget: confirmCastPanelWidget,
-          searchDevicePanel: searchDevicePanel,
-          searchPanelCurrentState: searchPanelCurrentState,
-          playerScreenPanel: playerScreenPanel,
-          playerScreenWidget: playerScreenWidget,
-          exitConfirmPanel: exitConfirmPanel,
-          stopFireTvConnection: stopFireTvConnection,
+        child: FancyDrawerWrapper(
+          hideOnContentTap: true,
+          backgroundColor: Colors.white, // Drawer background
+          controller: _navigationController, // Drawer controller
+          drawerItems: <Widget>[
+            Material(
+              color: Colors.white,
+              child: Container(
+                padding: EdgeInsets.only(bottom: 70.0),
+                child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    children: <Widget>[
+                      Image(
+                        image: AssetImage("images/fire_smal.png"),
+                        height: 40.0,
+                      ),
+                      SizedBox(width: 10.0),
+                      Text(
+                        "FireCast",
+                        style: TextStyle(
+                            fontFamily: "Roboto",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Material(
+              color: Colors.white,
+              child: InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                onTap: () {
+                  currentPageState = PageState.HOME_SCREEN;
+                  _navigationController.close();
+                  NavigationSystem();
+                },
+                child: Ink(
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.home, size: 30.0, color: kPrimaryTextColor),
+                      SizedBox(width: 10.0),
+                      Text("Home",
+                          style: TextStyle(
+                            fontFamily: "Roboto",
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+            ), // Home page
+            Material(
+              color: Colors.white,
+              child: InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                onTap: () async {
+                  _navigationController.close();
+                  currentPageState = PageState.FOLDER_VIDEO_SCREEN;
+                  NavigationSystem();
+                  videoFolders = await mediaService.getVideoAssetFolders();
+                  NavigationSystem();
+                },
+                child: Ink(
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.video_library,
+                          size: 30.0, color: Colors.indigoAccent),
+                      SizedBox(width: 10.0),
+                      Text("Videos",
+                          style: TextStyle(
+                            fontFamily: "Roboto",
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+            ), //Video Load
+            Material(
+              color: Colors.white,
+              child: InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                onTap: () async {
+                  _navigationController.close();
+                  currentPageState = PageState.FOLDER_IMAGE_SCREEN;
+                  NavigationSystem();
+                  imageFolders = await mediaService.getImageAssetFolders();
+                  NavigationSystem();
+                },
+                child: Ink(
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.collections,
+                          size: 30.0, color: Colors.orangeAccent),
+                      SizedBox(width: 10.0),
+                      Text("Images",
+                          style: TextStyle(
+                            fontFamily: "Roboto",
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+            ), //Image Load
+            Material(
+              color: Colors.white,
+              child: InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                onTap: () {
+                  _navigationController.close();
+                  exitConfirmPanel.open();
+                },
+                child: Ink(
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.exit_to_app,
+                          size: 30.0, color: kPrimaryTextColor),
+                      SizedBox(width: 10.0),
+                      Text("Exit",
+                          style: TextStyle(
+                            fontFamily: "Roboto",
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+            ), //Exit App
+            Material(
+              color: Colors.white,
+              child: Container(
+                padding: EdgeInsets.only(top: 70.0),
+                child: InkWell(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  onTap: () async {
+                    const url = 'https://atdebjoy.com/';
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      print("URL Launch Error");
+                    }
+                  },
+                  child: Ink(
+                    padding: EdgeInsets.all(15.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text("Made by ",
+                            style: TextStyle(
+                              fontFamily: "Roboto",
+                            )),
+                        Text("Debjoy ",
+                            style: TextStyle(
+                                fontFamily: "Roboto",
+                                fontWeight: FontWeight.bold)),
+                        Icon(Icons.favorite, color: Colors.red),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+          itemGap: 0.0,
+          child: ParentStack(
+            mMAINBODY: mMAINBODY,
+            confirmCastPanel: confirmCastPanel,
+            confirmCastPanelWidget: confirmCastPanelWidget,
+            searchDevicePanel: searchDevicePanel,
+            searchPanelCurrentState: searchPanelCurrentState,
+            playerScreenPanel: playerScreenPanel,
+            playerScreenWidget: playerScreenWidget,
+            exitConfirmPanel: exitConfirmPanel,
+            stopFireTvConnection: stopFireTvConnection,
+          ),
         ),
       ),
     );
@@ -504,18 +706,18 @@ class _ParentNavigatorState extends State<ParentNavigator> {
 }
 
 class ParentStack extends StatelessWidget {
-  const ParentStack(
-      {Key key,
-      @required this.mMAINBODY,
-      @required this.confirmCastPanel,
-      @required this.confirmCastPanelWidget,
-      @required this.searchDevicePanel,
-      @required this.searchPanelCurrentState,
-      @required this.playerScreenPanel,
-      @required this.playerScreenWidget,
-      @required this.exitConfirmPanel,
-      @required this.stopFireTvConnection})
-      : super(key: key);
+  const ParentStack({
+    Key key,
+    @required this.mMAINBODY,
+    @required this.confirmCastPanel,
+    @required this.confirmCastPanelWidget,
+    @required this.searchDevicePanel,
+    @required this.searchPanelCurrentState,
+    @required this.playerScreenPanel,
+    @required this.playerScreenWidget,
+    @required this.exitConfirmPanel,
+    @required this.stopFireTvConnection,
+  }) : super(key: key);
 
   final Widget mMAINBODY;
   final PanelController confirmCastPanel;
