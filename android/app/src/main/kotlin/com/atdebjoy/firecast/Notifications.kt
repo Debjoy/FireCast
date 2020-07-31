@@ -28,7 +28,8 @@ object Notifications {
     fun buildForegroundNotification(context: Context): Notification {
         return NotificationCompat
             .Builder(context, CHANNEL_ID_BACKGROUND_SERVICE)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_television_2
+            )
             .setContentTitle("FireCast Service")
             .setContentText("Keeping FireCast active 😀")
             .build()

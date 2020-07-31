@@ -497,11 +497,17 @@ class _ParentNavigatorState extends State<ParentNavigator>
   void initState() {
     super.initState();
     _navigationController = FancyDrawerController(
-        vsync: this, duration: Duration(milliseconds: 100))
+        vsync: this, duration: Duration(milliseconds: 150))
       ..addListener(() {
         setState(() {}); // Must call setState
       });
     NavigationSystem();
+  }
+
+  @override
+  void dispose() {
+    _navigationController.dispose(); // Dispose controller
+    super.dispose();
   }
 
   @override
