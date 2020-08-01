@@ -467,6 +467,7 @@ class _ParentNavigatorState extends State<ParentNavigator>
     print(pageStates);
     if (_navigationController.percentOpen > 0) {
       _navigationController.close();
+      return await Future.value(false);
     } else if (exitConfirmPanel.isPanelOpen) {
       exitConfirmPanel.close();
       return await Future.value(false);
