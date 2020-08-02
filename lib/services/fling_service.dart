@@ -56,7 +56,7 @@ class FlingService {
 
   playMedia() async => await FlutterFling.playPlayer();
   pauseMedia() async => await FlutterFling.pausePlayer();
-  stopCast() async {
+  Future<void> stopCast() async {
     await FlutterFling.stopPlayer();
     _flingDevices = null;
   }

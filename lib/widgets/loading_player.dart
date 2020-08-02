@@ -54,11 +54,10 @@ class LoadingPlayerScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SpinKitWave(
-                      //TODO: Try to mimic fireTV loading animation
                       color: Colors.lightBlueAccent,
                       size: 50.0,
-                      itemCount: 8,
-                      duration: Duration(milliseconds: 900),
+                      itemCount: 4,
+                      duration: Duration(milliseconds: 1000),
                     ),
                     SizedBox(height: 20.0),
                     Material(
@@ -66,7 +65,7 @@ class LoadingPlayerScreen extends StatelessWidget {
                       child: Text(
                         message,
                         style: TextStyle(
-                            color: Colors.black26,
+                            color: Colors.grey.shade700,
                             fontSize: 25.0,
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.none,

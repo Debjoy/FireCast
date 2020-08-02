@@ -16,8 +16,7 @@ class PlayerScreen extends StatelessWidget {
     @required this.onPositionChangeEnd,
     @required this.onSeekBackward,
     @required this.onSeekForward,
-    @required this.onMute,
-    @required this.onUnMute,
+    @required this.onStopCast,
     @required this.onPause,
     @required this.onPlay,
     @required this.onCollapsed,
@@ -35,8 +34,7 @@ class PlayerScreen extends StatelessWidget {
   final Function onSeekBackward;
   final Function onPlay;
   final Function onPause;
-  final Function onMute;
-  final Function onUnMute;
+  final Function onStopCast;
   final bool doHardRefresh;
   final Function onCollapsed;
   final Function onPlayNextMedia;
@@ -105,9 +103,9 @@ class PlayerScreen extends StatelessWidget {
                     Expanded(
                         child: InkWell(
                       borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                      onTap: isMuted ? onUnMute : onMute,
-                      child: Icon(isMuted ? Icons.volume_up : Icons.volume_off,
-                          size: 60.0, color: kPrimaryTextColor),
+                      onTap: onStopCast,
+                      child: Icon(Icons.stop_screen_share,
+                          size: 50.0, color: kPrimaryTextColor),
                     )),
                     Expanded(
                         child: InkWell(
@@ -176,7 +174,7 @@ class PlayerScreen extends StatelessWidget {
                         child: InkWell(
                       borderRadius: BorderRadius.all(Radius.circular(40.0)),
                       onTap: onSeekBackward,
-                      child: Icon(Icons.fast_rewind,
+                      child: Icon(Icons.replay_10,
                           size: 50.0, color: kPrimaryTextColor),
                     )),
                     Expanded(
@@ -197,7 +195,7 @@ class PlayerScreen extends StatelessWidget {
                         child: InkWell(
                       borderRadius: BorderRadius.all(Radius.circular(40.0)),
                       onTap: onSeekForward,
-                      child: Icon(Icons.fast_forward,
+                      child: Icon(Icons.forward_10,
                           size: 50.0, color: kPrimaryTextColor),
                     ))
                   ],

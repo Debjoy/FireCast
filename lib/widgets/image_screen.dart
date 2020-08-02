@@ -11,6 +11,7 @@ class ImageScreen extends StatelessWidget {
     @required this.onCollapse,
     @required this.onPlayNextMedia,
     @required this.onPlayPreviousMedia,
+    @required this.onStopCast,
     this.doHardRefresh: false,
   });
   final AssetEntity assetEntity;
@@ -18,6 +19,7 @@ class ImageScreen extends StatelessWidget {
   final Function onCollapse;
   final Function onPlayNextMedia;
   final Function onPlayPreviousMedia;
+  final Function onStopCast;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -79,7 +81,13 @@ class ImageScreen extends StatelessWidget {
                       child: Icon(Icons.skip_previous,
                           size: 70.0, color: kPrimaryTextColor),
                     )),
-                    Expanded(child: Container()),
+                    Expanded(
+                        child: InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      onTap: onStopCast,
+                      child: Icon(Icons.stop_screen_share,
+                          size: 60.0, color: kPrimaryTextColor),
+                    )),
                     Expanded(
                         child: InkWell(
                       borderRadius: BorderRadius.all(Radius.circular(40.0)),
