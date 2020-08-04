@@ -31,6 +31,9 @@ dependencies:
   http_server: ^0.9.8+3
   fancy_drawer: ^1.0.0
   url_launcher: ^5.5.0
+  introduction_screen: ^1.0.9
+  flutter_svg: ^0.17.0
+  shared_preferences: ^0.5.8
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +54,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

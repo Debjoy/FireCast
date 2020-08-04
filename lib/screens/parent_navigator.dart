@@ -736,7 +736,19 @@ class _ParentNavigatorState extends State<ParentNavigator>
           ],
           itemGap: 0.0,
           child: ParentStack(
-            mMAINBODY: mMAINBODY,
+            mMAINBODY: AnimatedSwitcher(
+              duration: Duration(milliseconds: 150),
+//              transitionBuilder: (child, animation) {
+//                final offsetAnimation = Tween<Offset>(
+//                        begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+//                    .animate(animation);
+//                return SlideTransition(
+//                  position: offsetAnimation,
+//                  child: child,
+//                );
+//              },
+              child: mMAINBODY,
+            ),
             confirmCastPanel: confirmCastPanel,
             confirmCastPanelWidget: confirmCastPanelWidget,
             searchDevicePanel: searchDevicePanel,
