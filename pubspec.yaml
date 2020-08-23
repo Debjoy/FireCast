@@ -28,12 +28,12 @@ dependencies:
   sliding_up_panel: ^1.0.2
   photo_manager: ^0.5.7
   flutter_spinkit: ^4.1.2
-  http_server: ^0.9.8+3
   fancy_drawer: ^1.0.0
   url_launcher: ^5.5.0
   introduction_screen: ^1.0.9
   flutter_svg: ^0.17.0
   shared_preferences: ^0.5.8
+  stream: ^2.5.1+5
 
 dev_dependencies:
   flutter_test:
