@@ -55,7 +55,7 @@ This app requires the following permissions:
 - <a href="https://pub.dev/packages/get_ip" target="_blank">get_ip</a>
 - <a href="https://pub.dev/packages/flutter_fling" target="_blank">flutter_fling</a>
 - <a href="https://pub.dev/packages/photo_manager" target="_blank">photo_manager</a>
-- <a href="https://pub.dev/packages/http_server" target="_blank">http_server </a>
+- <a href="https://pub.dev/packages/stream" target="_blank">Stream </a>
 
 ## License
 This application is released under MIT License (see [LICENSE](LICENSE)).
