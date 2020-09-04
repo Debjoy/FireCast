@@ -24,8 +24,10 @@ The android app lets you:
 ## Screenshots
 
 <br>
+
 [<img src="/readme_assets/images.png"
 width="100%" >](/readme_assets/images.png)
+
 <br>
 <br>
 
